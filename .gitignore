@@ -1,0 +1,24 @@
+# auto genrated by AS
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+
+# Built application files
+*.apk
+*.ap_
+
+# Log Files
+*.log
+
+# Keystore files
+# Uncomment the following line if you do not want to check your keystore files in.
+#*.jks
+
+# Google Services (e.g. APIs or Firebase)
+google-services.json
+
