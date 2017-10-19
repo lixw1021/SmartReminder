@@ -2,14 +2,19 @@ package com.xianwei.smartreminder;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
+
+import com.xianwei.smartreminder.adapter.ReminderPagerAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.navigation_drawer)
     DrawerLayout drawerLayout;
+    @BindView(R.id.navigation_view)
+    NavigationView navigationView;
     @BindView(R.id.toolbar_main)
     Toolbar toolbar;
     @BindView(R.id.view_pager)
@@ -42,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(reminderPagerAdapter);
         tableLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+        initNavigationDrawer();
     }
 
     private void setupToolbar() {
@@ -67,4 +75,27 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void initNavigationDrawer() {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_done:
+                        break;
+                    case R.id.menu_settings:
+                        break;
+                    case R.id.menu_remove_ads:
+                        break;
+                    case R.id.menu_feedback:
+                        break;
+                    case R.id.menu_about:
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+    }
 }

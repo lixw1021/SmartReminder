@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single"
+        android:id="@+id/basic_navigation_menu">
+        <item
+            android:id="@+id/menu_done"
+            android:icon="@drawable/ic_checked"
+            android:title="Done" />
+        <item
+            android:id="@+id/menu_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings" />
+
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/remove_ad">
+        <item
+            android:id="@+id/menu_remove_ads"
+            android:icon="@drawable/ic_pro"
+            android:title="Remove Ads" />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/app_info">
+        <item
+            android:id="@+id/menu_feedback"
+            android:icon="@drawable/ic_feedback"
+            android:title="Feedback" />
+        <item
+            android:id="@+id/menu_about"
+            android:icon="@drawable/ic_info"
+            android:title="About" />
+    </group>
+
+</menu>

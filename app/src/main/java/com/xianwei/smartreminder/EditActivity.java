@@ -10,6 +10,8 @@ import android.view.Menu;
 
 import com.hannesdorfmann.swipeback.Position;
 import com.hannesdorfmann.swipeback.SwipeBack;
+import com.xianwei.smartreminder.fragment.EditLocationFragment;
+import com.xianwei.smartreminder.fragment.EditTimeFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +36,7 @@ public class EditActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
+        setSupportActionBar(toolbar);
         int pageId;
         Intent intent = getIntent();
         if (intent.hasExtra("pageId")) {

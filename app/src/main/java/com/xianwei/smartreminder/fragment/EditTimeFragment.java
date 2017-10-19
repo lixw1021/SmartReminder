@@ -1,4 +1,4 @@
-package com.xianwei.smartreminder;
+package com.xianwei.smartreminder.fragment;
 
 
 import android.os.Bundle;
@@ -7,14 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.xianwei.smartreminder.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditLocationFragment extends Fragment {
+public class EditTimeFragment extends Fragment {
 
 
-    public EditLocationFragment() {
+    public EditTimeFragment() {
         // Required empty public constructor
     }
 
@@ -23,7 +25,7 @@ public class EditLocationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_location, container, false);
+        return inflater.inflate(R.layout.fragment_edit_time, container, false);
     }
 
 }
