@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Task :"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <EditText
+        android:id="@+id/et_time_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_task"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:hint="Enter TO_DO Here"
+        android:textSize="@dimen/item_subtitle_size"/>
+
+    <TextView
+        android:id="@+id/tv_data_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_time_task"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="16dp"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_date"
+        android:gravity="center_vertical"
+        android:text="Set reminder Data" />
+
+    <TextView
+        android:id="@+id/tv_time_picker"
+        android:layout_below="@+id/tv_data_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="16dp"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_time"
+        android:gravity="center_vertical"
+        android:text="Set reminder Time" />
+
+</RelativeLayout>

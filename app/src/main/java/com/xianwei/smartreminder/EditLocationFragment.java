@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TimeEditFragment extends Fragment {
+public class EditLocationFragment extends Fragment {
 
 
-    public TimeEditFragment() {
+    public EditLocationFragment() {
         // Required empty public constructor
     }
 
@@ -23,7 +23,7 @@ public class TimeEditFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_time_edit, container, false);
+        return inflater.inflate(R.layout.fragment_edit_location, container, false);
     }
 
 }

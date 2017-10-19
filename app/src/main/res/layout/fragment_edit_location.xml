@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.xianwei.smartreminder.EditLocationFragment">
+
+    <TextView
+        android:id="@+id/tv_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Task :"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <EditText
+        android:id="@+id/et_location_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_task"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:hint="Enter TO_DO Here"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_location_task"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Location :"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <EditText
+        android:id="@+id/et_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_location"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:hint="Enter Location Here"
+        android:textSize="@dimen/item_subtitle_size" />
+
+</RelativeLayout>
