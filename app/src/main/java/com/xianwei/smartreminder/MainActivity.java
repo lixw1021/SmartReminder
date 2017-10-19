@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.TableLayout;
+import android.view.Gravity;
+import android.view.View;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -15,6 +17,8 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
+    @BindView(R.id.navigation_drawer)
+    DrawerLayout drawerLayout;
     @BindView(R.id.toolbar_main)
     Toolbar toolbar;
     @BindView(R.id.view_pager)
@@ -32,12 +36,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        toolbar.setTitle("Smart Reminder");
+        setupToolbar();
 
         reminderPagerAdapter = new ReminderPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(reminderPagerAdapter);
         tableLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+    }
+
+    private void setupToolbar() {
+        toolbar.setTitle("Smart Reminder");
+        toolbar.setNavigationIcon(R.drawable.ic_dehaze);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(Gravity.START);
+            }
+        });
     }
 
     private void setupTabIcons() {
@@ -46,9 +61,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.fab_add)
-    void addReminder(){
+    void addReminder() {
         Intent intent = new Intent(MainActivity.this, EditActivity.class);
         intent.putExtra("pageId", viewPager.getCurrentItem());
         startActivity(intent);
     }
+
 }
