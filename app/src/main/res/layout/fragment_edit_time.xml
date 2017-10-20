@@ -17,36 +17,72 @@
         android:id="@+id/et_time_task"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_task"
+        android:layout_below="@id/tv_task"
         android:layout_marginEnd="@dimen/margin_horizontal"
         android:layout_marginStart="@dimen/margin_horizontal"
         android:hint="Enter TO_DO Here"
-        android:textSize="@dimen/item_subtitle_size"/>
+        android:textSize="@dimen/item_subtitle_size" />
 
-    <TextView
-        android:id="@+id/tv_data_picker"
+    <LinearLayout
+        android:id="@+id/date_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_time_task"
-        android:layout_marginEnd="@dimen/margin_horizontal"
-        android:layout_marginStart="@dimen/margin_horizontal"
-        android:layout_marginTop="16dp"
-        android:drawablePadding="16dp"
-        android:drawableStart="@drawable/ic_date"
-        android:gravity="center_vertical"
-        android:text="Set reminder Data" />
+        android:layout_below="@id/et_time_task"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tv_time_picker"
-        android:layout_below="@+id/tv_data_picker"
+        <TextView
+            android:id="@+id/tv_date_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_horizontal"
+            android:layout_marginStart="@dimen/margin_horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_weight="4"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_date"
+            android:gravity="center_vertical"
+            android:hint="Set reminder Data" />
+
+        <ImageButton
+            android:id="@+id/ib_data_clean"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_clear"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/time_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_horizontal"
-        android:layout_marginStart="@dimen/margin_horizontal"
-        android:layout_marginTop="16dp"
-        android:drawablePadding="16dp"
-        android:drawableStart="@drawable/ic_time"
-        android:gravity="center_vertical"
-        android:text="Set reminder Time" />
+        android:layout_below="@id/date_layout"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/tv_time_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_horizontal"
+            android:layout_marginStart="@dimen/margin_horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_weight="4"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_time"
+            android:gravity="center_vertical"
+            android:hint="Set reminder Time"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/ib_time_clean"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_clear"
+            android:visibility="gone" />
+    </LinearLayout>
 </RelativeLayout>

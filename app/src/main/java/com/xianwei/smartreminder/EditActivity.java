@@ -36,22 +36,18 @@ public class EditActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
+        toolbar.setTitle("New Task");
         setSupportActionBar(toolbar);
-        int pageId;
+
         Intent intent = getIntent();
-        if (intent.hasExtra("pageId")) {
-            pageId = intent.getIntExtra("pageId", 0);
-            setupFragment(pageId);
-            toolbar.setTitle("New Task");
+        if (intent.hasExtra("pageId") && savedInstanceState == null) {
+            setupFragment(intent);
         }
     }
 
-    private void setupFragment(int pageId) {
-        if (pageId == 0) {
-            fragment = new EditTimeFragment();
-        } else {
-            fragment = new EditLocationFragment();
-        }
+    private void setupFragment(Intent intent) {
+        int pageId = intent.getIntExtra("pageId", 0);
+        fragment = (pageId == 0) ? new EditTimeFragment() : new EditLocationFragment();
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -61,7 +57,7 @@ public class EditActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
         return true;
     }
 
