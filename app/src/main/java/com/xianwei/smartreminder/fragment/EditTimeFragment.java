@@ -3,11 +3,11 @@ package com.xianwei.smartreminder.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,9 +17,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.xianwei.smartreminder.R;
+import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
 import com.xianwei.smartreminder.util.TimeUtil;
+
+import org.xml.sax.DTDHandler;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -46,12 +50,15 @@ public class EditTimeFragment extends Fragment {
 
     private static String DATE_KEY = "date";
     private static String TIME_KEY = "time";
+    private static int DATABASE_TRUE = 1;
+    private static int DATABASE_FALSE = 0;
+    private boolean hasTime = false;
 
-    private int year;
-    private int month;
-    private int day;
-    private int hour;
-    private int minute;
+    private int pickedYear;
+    private int pickedMonth;
+    private int pickedDay;
+    private int pickedHour;
+    private int pickedMinute;
 
     public EditTimeFragment() {
     }
@@ -84,9 +91,9 @@ public class EditTimeFragment extends Fragment {
     @OnClick(R.id.tv_date_picker)
     public void datePick() {
         final Calendar currentCalender = Calendar.getInstance();
-        year = currentCalender.get(Calendar.YEAR);
-        month = currentCalender.get(Calendar.MONTH);
-        day = currentCalender.get(Calendar.DAY_OF_MONTH);
+        int year = currentCalender.get(Calendar.YEAR);
+        int month = currentCalender.get(Calendar.MONTH);
+        int day = currentCalender.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getContext(),
@@ -95,6 +102,9 @@ public class EditTimeFragment extends Fragment {
                     @Override
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
+                        pickedYear = year;
+                        pickedMonth = monthOfYear;
+                        pickedDay = dayOfMonth;
                         datePickTv.setText(TimeUtil.dateFormat(year, monthOfYear, dayOfMonth));
                         dataClearBtn.setVisibility(View.VISIBLE);
                         timePickTv.setVisibility(View.VISIBLE);
@@ -114,25 +124,29 @@ public class EditTimeFragment extends Fragment {
         if (timeCleanBtn != null) {
             timeCleanBtn.setVisibility(View.GONE);
         }
+        hasTime = false;
         dataClearBtn.setVisibility(View.GONE);
         datePickTv.setText(null);
-        year = 0;
-        month = 0;
-        day = 0;
+        pickedYear = 0;
+        pickedMonth = 0;
+        pickedDay = 0;
     }
 
     @OnClick(R.id.tv_time_picker)
     public void timePick() {
         final Calendar currentCalender = Calendar.getInstance();
-        hour = currentCalender.get(Calendar.HOUR_OF_DAY);
-        minute = currentCalender.get(Calendar.MINUTE);
+        int hour = currentCalender.get(Calendar.HOUR_OF_DAY);
+        int minute = currentCalender.get(Calendar.MINUTE);
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 getContext(),
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        pickedHour = hourOfDay;
+                        pickedMinute = minute;
                         timePickTv.setText(TimeUtil.timeFormat(hourOfDay, minute));
+                        hasTime = true;
                         timeCleanBtn.setVisibility(View.VISIBLE);
                     }
                 },
@@ -146,8 +160,9 @@ public class EditTimeFragment extends Fragment {
     public void timeClean() {
         timePickTv.setText(null);
         timeCleanBtn.setVisibility(View.GONE);
-        hour = 0;
-        minute = 0;
+        pickedHour = 0;
+        pickedMinute = 0;
+        hasTime = false;
     }
 
     @Override
@@ -163,10 +178,25 @@ public class EditTimeFragment extends Fragment {
     }
 
     private void saveTask() {
+        //extract information
         String task = timeEt.getText().toString().trim();
-        Date date = new Date(year - 1900, month, day, hour, minute);
+        Date date = new Date(pickedYear - 1900, pickedMonth, pickedDay, pickedHour, pickedMinute);
         long timeInMilliseconds = date.getTime();
-        Log.i("1234millisecond date", String.valueOf(timeInMilliseconds));
+
+        if (!TextUtils.isEmpty(task)) {
+            // insert data into database
+            ContentValues values = new ContentValues();
+            values.put(TimeEntry.COLUMN_NAME_TASK, task);
+            values.put(TimeEntry.COLUMN_NAME_MILLISECOND, timeInMilliseconds);
+            values.put(TimeEntry.COLUMN_NAME_HAS_TIME, hasTime ? DATABASE_TRUE : DATABASE_FALSE);
+            values.put(TimeEntry.COLUMN_NAME_TASK_DONE, DATABASE_FALSE);
+            getContext().getContentResolver().insert(TimeEntry.CONTENT_URL, values);
+            getActivity().finish();
+            Toast.makeText(getContext(), "Reminder Saved", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getContext(), "Please add a task", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override

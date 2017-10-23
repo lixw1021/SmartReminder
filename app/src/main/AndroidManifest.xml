@@ -18,6 +18,10 @@
         </activity>
         <activity android:name=".EditActivity"
             android:parentActivityName=".MainActivity"/>
+        
+        <provider
+            android:authorities="com.xianwei.smartreminder"
+            android:name=".data.ReminderProvider"/>
     </application>
 
 </manifest>
