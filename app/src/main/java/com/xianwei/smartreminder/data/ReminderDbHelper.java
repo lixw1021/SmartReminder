@@ -19,8 +19,8 @@ public class ReminderDbHelper extends SQLiteOpenHelper {
                     TimeEntry._ID + " INTEGER PRIMARY KEY," +
                     TimeEntry.COLUMN_NAME_TASK + " TEXT NOT NULL," +
                     TimeEntry.COLUMN_NAME_MILLISECOND + " INTEGER NOT NULL DEFAULT 0," +
-                    TimeEntry.COLUMN_NAME_TASK_DONE + " INTEGER NOT NULL DEFAULT 0," +
-                    TimeEntry.COLUMN_NAME_HAS_TIME + " INTEGER NOT NULL DEFAULT 0)";
+                    TimeEntry.COLUMN_NAME_HAS_TIME + " INTEGER NOT NULL DEFAULT 0," +
+                    TimeEntry.COLUMN_NAME_TASK_DONE + " INTEGER NOT NULL DEFAULT 0)";
 
     private static final String SQL_CREATE_LOCATION_ENTRY =
             "CREATE TABLE " + LocationEntry.TABLE_NAME + " (" +

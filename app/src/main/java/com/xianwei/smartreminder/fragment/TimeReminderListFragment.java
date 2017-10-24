@@ -31,6 +31,9 @@ public class TimeReminderListFragment extends Fragment
     @BindView(R.id.reminder_list)
     RecyclerView reminderRecyclerView;
 
+    private static int DATABASE_FALSE = 0;
+    private static int DATABASE_TRUE = 1;
+
     private TimeReminderAdapter timeReminderAdapter;
 
     public TimeReminderListFragment() {
@@ -63,9 +66,15 @@ public class TimeReminderListFragment extends Fragment
         String[] projection = new String[]{TimeEntry._ID,
                 TimeEntry.COLUMN_NAME_TASK,
                 TimeEntry.COLUMN_NAME_MILLISECOND,
-                TimeEntry.COLUMN_NAME_HAS_TIME};
+                TimeEntry.COLUMN_NAME_HAS_TIME,
+                TimeEntry.COLUMN_NAME_TASK_DONE};
 
-        return new CursorLoader(getContext(), TimeEntry.CONTENT_URL, projection, null, null, null);
+        return new CursorLoader(getContext(),
+                TimeEntry.CONTENT_URL,
+                projection,
+                TimeEntry.COLUMN_NAME_TASK_DONE + "=?",
+                new String[]{String.valueOf(DATABASE_FALSE)},
+                TimeEntry.COLUMN_NAME_MILLISECOND + " ASC");
     }
 
     @Override

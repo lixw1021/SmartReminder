@@ -45,9 +45,15 @@ public class ReminderProvider extends ContentProvider {
         SQLiteDatabase db = reminderDbHelper.getReadableDatabase();
         Cursor cursor;
         switch (uriMatcher.match(uri)) {
+            case REMINDER_ID:
+                selection = TimeEntry._ID + "=?";
+                selectionArgs = new String[] {uri.getLastPathSegment()};
+                cursor = db.query(TimeEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
             case REMINDER:
                 cursor = db.query(TimeEntry.TABLE_NAME, projection, selection, selectionArgs,
-                        null, null, TimeEntry.COLUMN_NAME_MILLISECOND + " ASC");
+                        null, null, sortOrder);
                 break;
             default:
                 throw new IllegalArgumentException("query is not support for :" + uri);
@@ -100,7 +106,29 @@ public class ReminderProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values,
                       @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        switch (uriMatcher.match(uri)) {
+            case REMINDER_ID:
+                selection = TimeEntry._ID + "=?";
+                selectionArgs = new String[]{uri.getLastPathSegment()};
+                return updateTimeReminder(uri, values, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("update is not support for :" + uri);
+        }
+    }
+
+    private int updateTimeReminder(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        if (values.containsKey(TimeEntry.COLUMN_NAME_TASK)) {
+            String task = values.getAsString(TimeEntry.COLUMN_NAME_TASK);
+            if (task == null) {
+                throw new IllegalArgumentException("update is not supported for :" +uri);
+            }
+        }
+        SQLiteDatabase db = reminderDbHelper.getWritableDatabase();
+        int rowsUpdated = db.update(TimeEntry.TABLE_NAME, values, selection, selectionArgs);
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsUpdated;
     }
 
 

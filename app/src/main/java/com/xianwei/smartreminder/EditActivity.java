@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 
 import com.hannesdorfmann.swipeback.Position;
@@ -36,13 +37,18 @@ public class EditActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
-        toolbar.setTitle("New Task");
-        setSupportActionBar(toolbar);
+
+
 
         Intent intent = getIntent();
         if (intent.hasExtra("pageId") && savedInstanceState == null) {
+            toolbar.setTitle("New Task");
             setupFragment(intent);
+        } else if (intent.hasExtra("itemId") && savedInstanceState == null) {
+            toolbar.setTitle("Edit Task");
+            setupEditFragment(intent);
         }
+        setSupportActionBar(toolbar);
     }
 
     private void setupFragment(Intent intent) {
@@ -52,6 +58,17 @@ public class EditActivity extends AppCompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.edit_fragment_container, fragment)
+                .commit();
+    }
+
+    private void setupEditFragment(Intent intent) {
+        Bundle bundle = intent.getExtras();
+        Log.i("12345bundle=null", String.valueOf(bundle == null));
+        EditTimeFragment fragment = new EditTimeFragment();
+        fragment.setArguments(bundle);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.edit_fragment_container, new EditTimeFragment())
                 .commit();
     }
 

@@ -4,10 +4,13 @@ package com.xianwei.smartreminder.fragment;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +24,8 @@ import android.widget.Toast;
 
 import com.xianwei.smartreminder.R;
 import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
+import com.xianwei.smartreminder.module.DateAndTime;
 import com.xianwei.smartreminder.util.TimeUtil;
-
-import org.xml.sax.DTDHandler;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -38,7 +40,7 @@ import butterknife.OnClick;
  */
 public class EditTimeFragment extends Fragment {
     @BindView(R.id.et_time_task)
-    EditText timeEt;
+    EditText taskEt;
     @BindView(R.id.tv_date_picker)
     TextView datePickTv;
     @BindView(R.id.tv_time_picker)
@@ -52,8 +54,12 @@ public class EditTimeFragment extends Fragment {
     private static String TIME_KEY = "time";
     private static int DATABASE_TRUE = 1;
     private static int DATABASE_FALSE = 0;
-    private boolean hasTime = false;
 
+    private int hasTime = DATABASE_FALSE;
+    private int taskDone = DATABASE_FALSE;
+
+    private Bundle bundle;
+    private int itemId;
     private int pickedYear;
     private int pickedMonth;
     private int pickedDay;
@@ -69,7 +75,57 @@ public class EditTimeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_time, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
+        bundle = this.getArguments();
+        Log.i("12345 bundle is null", String.valueOf(bundle == null));
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (bundle != null) {
+            itemId = Integer.parseInt(bundle.getString("itemId"));
+            Log.i("12345 itemId", String.valueOf(itemId));
+            setupItemInfo(itemId);
+        }
+    }
+
+    private void setupItemInfo(int itemId) {
+        Cursor cursor = queryData(itemId);
+        String task = cursor.getString(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK));
+        long millisecond = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_MILLISECOND));
+        hasTime = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_HAS_TIME));
+        taskDone = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK_DONE));
+
+        taskEt.setText(task);
+
+        if (millisecond > 0) {
+            DateAndTime dateAndTime = TimeUtil.millisecondToDateAndTime(millisecond);
+            pickedYear = dateAndTime.getYear();
+            pickedMonth = dateAndTime.getMonth();
+            pickedDay = dateAndTime.getDay();
+            pickedHour = dateAndTime.getHour();
+            pickedMinute = dateAndTime.getMinute();
+
+            String dateString = TimeUtil.dateDisplay(pickedYear, pickedMonth, pickedDay);
+            String timeString = TimeUtil.timeDisplay(pickedHour, pickedMinute);
+
+            datePickTv.setText(dateString);
+            if (hasTime == DATABASE_TRUE) {
+                timePickTv.setText(timeString);
+            }
+        }
+    }
+
+    private Cursor queryData(int itemId) {
+        String[] projection = new String[]{TimeEntry._ID,
+                TimeEntry.COLUMN_NAME_TASK,
+                TimeEntry.COLUMN_NAME_MILLISECOND,
+                TimeEntry.COLUMN_NAME_HAS_TIME,
+                TimeEntry.COLUMN_NAME_TASK_DONE};
+
+        Uri uri = Uri.withAppendedPath(TimeEntry.CONTENT_URL, String.valueOf(itemId));
+        return getContext().getContentResolver().query(uri, projection, null, null, null, null);
     }
 
     @Override
@@ -105,7 +161,7 @@ public class EditTimeFragment extends Fragment {
                         pickedYear = year;
                         pickedMonth = monthOfYear;
                         pickedDay = dayOfMonth;
-                        datePickTv.setText(TimeUtil.dateFormat(year, monthOfYear, dayOfMonth));
+                        datePickTv.setText(TimeUtil.dateDisplay(year, monthOfYear, dayOfMonth));
                         dataClearBtn.setVisibility(View.VISIBLE);
                         timePickTv.setVisibility(View.VISIBLE);
                     }
@@ -124,7 +180,7 @@ public class EditTimeFragment extends Fragment {
         if (timeCleanBtn != null) {
             timeCleanBtn.setVisibility(View.GONE);
         }
-        hasTime = false;
+        hasTime = DATABASE_FALSE;
         dataClearBtn.setVisibility(View.GONE);
         datePickTv.setText(null);
         pickedYear = 0;
@@ -145,8 +201,8 @@ public class EditTimeFragment extends Fragment {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         pickedHour = hourOfDay;
                         pickedMinute = minute;
-                        timePickTv.setText(TimeUtil.timeFormat(hourOfDay, minute));
-                        hasTime = true;
+                        timePickTv.setText(TimeUtil.timeDisplay(hourOfDay, minute));
+                        hasTime = DATABASE_TRUE;
                         timeCleanBtn.setVisibility(View.VISIBLE);
                     }
                 },
@@ -162,7 +218,7 @@ public class EditTimeFragment extends Fragment {
         timeCleanBtn.setVisibility(View.GONE);
         pickedHour = 0;
         pickedMinute = 0;
-        hasTime = false;
+        hasTime = DATABASE_FALSE;
     }
 
     @Override
@@ -177,26 +233,30 @@ public class EditTimeFragment extends Fragment {
         return true;
     }
 
+    //save or update data
     private void saveTask() {
-        //extract information
-        String task = timeEt.getText().toString().trim();
+        String task = taskEt.getText().toString().trim();
         Date date = new Date(pickedYear - 1900, pickedMonth, pickedDay, pickedHour, pickedMinute);
         long timeInMilliseconds = date.getTime();
 
         if (!TextUtils.isEmpty(task)) {
-            // insert data into database
             ContentValues values = new ContentValues();
             values.put(TimeEntry.COLUMN_NAME_TASK, task);
             values.put(TimeEntry.COLUMN_NAME_MILLISECOND, timeInMilliseconds);
-            values.put(TimeEntry.COLUMN_NAME_HAS_TIME, hasTime ? DATABASE_TRUE : DATABASE_FALSE);
+            values.put(TimeEntry.COLUMN_NAME_HAS_TIME, hasTime);
             values.put(TimeEntry.COLUMN_NAME_TASK_DONE, DATABASE_FALSE);
-            getContext().getContentResolver().insert(TimeEntry.CONTENT_URL, values);
+
+             if (itemId > 0) {
+                 Uri uri = Uri.withAppendedPath(TimeEntry.CONTENT_URL, String.valueOf(itemId));
+                 getContext().getContentResolver().update(uri, values, null, null);
+             } else {
+                 getContext().getContentResolver().insert(TimeEntry.CONTENT_URL, values);
+             }
             getActivity().finish();
             Toast.makeText(getContext(), "Reminder Saved", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getContext(), "Please add a task", Toast.LENGTH_LONG).show();
         }
-
     }
 
     @Override

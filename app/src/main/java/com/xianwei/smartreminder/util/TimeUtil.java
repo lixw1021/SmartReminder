@@ -3,6 +3,7 @@ package com.xianwei.smartreminder.util;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.xianwei.smartreminder.module.DateAndTime;
 import com.xianwei.smartreminder.module.TimeReminder;
 
 import java.text.DateFormat;
@@ -16,14 +17,14 @@ import java.util.Date;
 
 public class TimeUtil {
 
-    public static String timeFormat(int hourOfDay, int minutes) {
+    public static String timeDisplay(int hourOfDay, int minutes) {
         String minuteString;
         if (minutes < 10) {
             minuteString = "0" + minutes;
         } else {
             minuteString = String.valueOf(minutes);
         }
-        Log.i("1234millisecond time", String.valueOf((hourOfDay*60 + minutes)*60*1000));
+
         if (hourOfDay > 12) {
             return (hourOfDay - 12) + ":" + minuteString + " PM";
         } else if (hourOfDay == 12){
@@ -33,16 +34,16 @@ public class TimeUtil {
         }
     }
 
-    public static String dateFormat(int year, int month, int day) {
+    public static String dateDisplay(int year, int month, int day) {
+        if (year == 0) return null;
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
         Date date = new Date(year - 1900, month, day);
-        long timeInMilliseconds = date.getTime();
-        Log.i("1234millisecond date", String.valueOf(timeInMilliseconds));
+
         return simpleDateFormat.format(date);
     }
 
-    public static TimeReminder millisecondToDateAndTime(long milliSeconds) {
-        if (milliSeconds < 0) return  new TimeReminder(null, null, null, false);;
+    public static DateAndTime millisecondToDateAndTime(long milliSeconds) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(milliSeconds);
@@ -52,9 +53,6 @@ public class TimeUtil {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
-        String date = dateFormat(year, month, day);
-        String time = timeFormat(hour, minute);
-
-        return new TimeReminder(null, date, time, false);
+        return new DateAndTime(year, month, day, hour, minute);
     }
 }

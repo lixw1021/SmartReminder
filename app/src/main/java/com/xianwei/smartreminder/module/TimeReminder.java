@@ -6,14 +6,14 @@ package com.xianwei.smartreminder.module;
 
 public class TimeReminder {
     private String task;
-    private String date;
-    private String time;
+    private long millisecond;
+    private boolean hasTime;
     private boolean done;
 
-    public TimeReminder(String task, String date, String time, boolean done) {
+    public TimeReminder(String task, long millisecond, boolean hasTime, boolean done) {
         this.task = task;
-        this.date = date;
-        this.time = time;
+        this.millisecond = millisecond;
+        this.hasTime = hasTime;
         this.done = done;
     }
 
@@ -21,12 +21,12 @@ public class TimeReminder {
         return task;
     }
 
-    public String getDate() {
-        return date;
+    public long getMillisecond() {
+        return millisecond;
     }
 
-    public String getTime() {
-        return time;
+    public boolean isHasTime() {
+        return hasTime;
     }
 
     public boolean isDone() {
