@@ -68,7 +68,7 @@ public class EditActivity extends AppCompatActivity {
         fragment.setArguments(bundle);
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.edit_fragment_container, new EditTimeFragment())
+                .add(R.id.edit_fragment_container, fragment)
                 .commit();
     }
 

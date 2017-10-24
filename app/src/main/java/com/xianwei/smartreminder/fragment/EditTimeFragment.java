@@ -45,10 +45,12 @@ public class EditTimeFragment extends Fragment {
     TextView datePickTv;
     @BindView(R.id.tv_time_picker)
     TextView timePickTv;
-    @BindView(R.id.ib_data_clean)
-    ImageButton dataClearBtn;
+    @BindView(R.id.ib_date_clean)
+    ImageButton dateClearBtn;
     @BindView(R.id.ib_time_clean)
     ImageButton timeCleanBtn;
+    @BindView(R.id.ib_delete)
+    ImageButton deleteBtn;
 
     private static String DATE_KEY = "date";
     private static String TIME_KEY = "time";
@@ -76,7 +78,6 @@ public class EditTimeFragment extends Fragment {
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         bundle = this.getArguments();
-        Log.i("12345 bundle is null", String.valueOf(bundle == null));
         return view;
     }
 
@@ -84,20 +85,21 @@ public class EditTimeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (bundle != null) {
-            itemId = Integer.parseInt(bundle.getString("itemId"));
-            Log.i("12345 itemId", String.valueOf(itemId));
+            itemId = bundle.getInt("itemId");
             setupItemInfo(itemId);
         }
     }
 
     private void setupItemInfo(int itemId) {
         Cursor cursor = queryData(itemId);
+        cursor.moveToFirst();
         String task = cursor.getString(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK));
-        long millisecond = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_MILLISECOND));
+        long millisecond = cursor.getLong(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_MILLISECOND));
         hasTime = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_HAS_TIME));
         taskDone = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK_DONE));
 
         taskEt.setText(task);
+        deleteBtn.setVisibility(View.VISIBLE);
 
         if (millisecond > 0) {
             DateAndTime dateAndTime = TimeUtil.millisecondToDateAndTime(millisecond);
@@ -107,11 +109,14 @@ public class EditTimeFragment extends Fragment {
             pickedHour = dateAndTime.getHour();
             pickedMinute = dateAndTime.getMinute();
 
+            dateClearBtn.setVisibility(View.VISIBLE);
+            timePickTv.setVisibility(View.VISIBLE);
             String dateString = TimeUtil.dateDisplay(pickedYear, pickedMonth, pickedDay);
             String timeString = TimeUtil.timeDisplay(pickedHour, pickedMinute);
 
             datePickTv.setText(dateString);
             if (hasTime == DATABASE_TRUE) {
+                timeCleanBtn.setVisibility(View.VISIBLE);
                 timePickTv.setText(timeString);
             }
         }
@@ -134,7 +139,7 @@ public class EditTimeFragment extends Fragment {
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(DATE_KEY)) {
                 datePickTv.setText(savedInstanceState.getString(DATE_KEY));
-                dataClearBtn.setVisibility(View.VISIBLE);
+                dateClearBtn.setVisibility(View.VISIBLE);
                 timePickTv.setVisibility(View.VISIBLE);
             }
             if (savedInstanceState.containsKey(TIME_KEY)) {
@@ -162,7 +167,7 @@ public class EditTimeFragment extends Fragment {
                         pickedMonth = monthOfYear;
                         pickedDay = dayOfMonth;
                         datePickTv.setText(TimeUtil.dateDisplay(year, monthOfYear, dayOfMonth));
-                        dataClearBtn.setVisibility(View.VISIBLE);
+                        dateClearBtn.setVisibility(View.VISIBLE);
                         timePickTv.setVisibility(View.VISIBLE);
                     }
                 },
@@ -172,7 +177,7 @@ public class EditTimeFragment extends Fragment {
         datePickerDialog.show();
     }
 
-    @OnClick(R.id.ib_data_clean)
+    @OnClick(R.id.ib_date_clean)
     public void dateClean() {
         if (timePickTv != null) {
             timePickTv.setVisibility(View.GONE);
@@ -181,7 +186,7 @@ public class EditTimeFragment extends Fragment {
             timeCleanBtn.setVisibility(View.GONE);
         }
         hasTime = DATABASE_FALSE;
-        dataClearBtn.setVisibility(View.GONE);
+        dateClearBtn.setVisibility(View.GONE);
         datePickTv.setText(null);
         pickedYear = 0;
         pickedMonth = 0;
@@ -221,6 +226,14 @@ public class EditTimeFragment extends Fragment {
         hasTime = DATABASE_FALSE;
     }
 
+    @OnClick(R.id.ib_delete)
+    public void deleteItem() {
+        Uri uri = Uri.withAppendedPath(TimeEntry.CONTENT_URL, String.valueOf(itemId));
+        getContext().getContentResolver().delete(uri, null, null);
+        getActivity().finish();
+        showToast("Reminder deleted");
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -253,9 +266,9 @@ public class EditTimeFragment extends Fragment {
                  getContext().getContentResolver().insert(TimeEntry.CONTENT_URL, values);
              }
             getActivity().finish();
-            Toast.makeText(getContext(), "Reminder Saved", Toast.LENGTH_LONG).show();
+            showToast("Reminder Saved");
         } else {
-            Toast.makeText(getContext(), "Please add a task", Toast.LENGTH_LONG).show();
+            showToast("Please add a task");
         }
     }
 
@@ -270,5 +283,9 @@ public class EditTimeFragment extends Fragment {
         if (!TextUtils.isEmpty(time)) {
             outState.putString(TIME_KEY, time);
         }
+    }
+
+    public void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 }

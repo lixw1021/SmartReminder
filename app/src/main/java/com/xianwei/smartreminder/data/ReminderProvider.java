@@ -94,6 +94,9 @@ public class ReminderProvider extends ContentProvider {
                 selectionArgs = new String[] {uri.getLastPathSegment()};
                 rowDeleted = db.delete(TimeEntry.TABLE_NAME, selection, selectionArgs);
                 break;
+            case REMINDER:
+                rowDeleted = db.delete(TimeEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("delete is not supported for :" + uri);
         }

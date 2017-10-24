@@ -44,7 +44,7 @@
             android:hint="Set reminder Data" />
 
         <ImageButton
-            android:id="@+id/ib_data_clean"
+            android:id="@+id/ib_date_clean"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
@@ -85,4 +85,16 @@
             android:src="@drawable/ic_clear"
             android:visibility="gone" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/ib_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/time_layout"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorWhite"
+        android:src="@drawable/ic_delete"
+        android:visibility="gone"/>
 </RelativeLayout>
