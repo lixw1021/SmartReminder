@@ -9,6 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_place_api_key" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,16 +21,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditActivity"
-            android:parentActivityName=".MainActivity"/>
-        
-        <provider
-            android:authorities="com.xianwei.smartreminder"
-            android:name=".data.ReminderProvider"/>
+        <activity
+            android:name=".EditActivity"
+            android:parentActivityName=".MainActivity" />
 
-        <service android:name=".service.ReminderIntentService"
-            android:exported="false"
-            android:enabled="true"/>
+        <provider
+            android:name=".data.ReminderProvider"
+            android:authorities="com.xianwei.smartreminder" />
+
+        <service
+            android:name=".service.ReminderIntentService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>
