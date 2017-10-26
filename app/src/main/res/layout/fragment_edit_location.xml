@@ -31,18 +31,33 @@
         android:layout_below="@+id/et_location_task"
         android:layout_marginStart="@dimen/margin_horizontal"
         android:layout_marginTop="16dp"
-        android:text="Location :"
-        android:textColor="@color/colorPrimary"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_location"
+        android:gravity="center_vertical"
+        android:text="Set reminder location"
         android:textSize="@dimen/item_subtitle_size" />
 
-    <EditText
-        android:id="@+id/et_task"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_location"
-        android:layout_marginEnd="@dimen/margin_horizontal"
-        android:layout_marginStart="@dimen/margin_horizontal"
-        android:hint="Enter Location Here"
-        android:textSize="@dimen/item_subtitle_size" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="4dp"
+            android:src="@drawable/powered_by_google_light" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:paddingBottom="4dp"
+            android:text="http://www.google.com/policies/privacy"
+            android:textAlignment="center" />
+    </LinearLayout>
 
 </RelativeLayout>
