@@ -1,6 +1,7 @@
 package com.xianwei.smartreminder.fragment;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,9 @@ public class TimeReminderListFragment extends Fragment
 
     private static int DATABASE_FALSE = 0;
     private static int DATABASE_TRUE = 1;
+    private static final String ID_KEY = "id";
+    private static final String MILLISECONDS_KEY = "milliseconds";
+    private static final String TASK_KEY = "task";
 
     private TimeReminderAdapter timeReminderAdapter;
 
@@ -93,14 +98,20 @@ public class TimeReminderListFragment extends Fragment
         long currentMilliseconds = System.currentTimeMillis();
         long milliseconds;
         while (cursor.moveToNext()) {
-            int hasTime = cursor.
-                    getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_HAS_TIME));
-            milliseconds = cursor.
-                    getLong(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_MILLISECOND));
+            int hasTime = cursor
+                    .getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_HAS_TIME));
+            milliseconds = cursor
+                    .getLong(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_MILLISECOND));
             if (hasTime == DATABASE_TRUE && milliseconds >= currentMilliseconds) {
-                String task = cursor.
-                        getString(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK));
-                NotificationUtils.setupNotificationService(getContext(), milliseconds, task);
+                int id = cursor
+                        .getInt(cursor.getColumnIndexOrThrow(TimeEntry._ID));
+                String task = cursor
+                        .getString(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK));
+                Bundle bundle = new Bundle();
+                bundle.putInt(ID_KEY, id);
+                bundle.putLong(MILLISECONDS_KEY, milliseconds);
+                bundle.putString(TASK_KEY, task);
+                NotificationUtils.setupNotificationService(getContext(), bundle);
                 break;
             }
         }
