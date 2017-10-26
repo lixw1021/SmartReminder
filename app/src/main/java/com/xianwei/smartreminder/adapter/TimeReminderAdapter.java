@@ -5,20 +5,21 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xianwei.smartreminder.EditActivity;
-import com.xianwei.smartreminder.MainActivity;
 import com.xianwei.smartreminder.R;
 import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
 import com.xianwei.smartreminder.module.DateAndTime;
-import com.xianwei.smartreminder.module.TimeReminder;
 import com.xianwei.smartreminder.util.TimeUtil;
 
 import butterknife.BindView;
@@ -72,6 +73,7 @@ public class TimeReminderAdapter extends RecyclerView.Adapter<TimeReminderAdapte
                 if (holder.checkBox.isChecked()) {
                     Uri itemUri = ContentUris.withAppendedId(TimeEntry.CONTENT_URL, id);
                     updateItem(itemUri);
+                    Toast.makeText(context, "Task finished", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -13,8 +13,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.xianwei.smartreminder.adapter.ReminderPagerAdapter;
+import com.xianwei.smartreminder.util.NotificationUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tableLayout;
     @BindView(R.id.fab_add)
     FloatingActionButton fab;
+    @BindView(R.id.ib_voice_input)
+    ImageButton voiceInputBtn;
 
     private ReminderPagerAdapter reminderPagerAdapter;
 
@@ -73,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, EditActivity.class);
         intent.putExtra("pageId", viewPager.getCurrentItem());
         startActivity(intent);
+    }
+
+    @OnClick(R.id.ib_voice_input)
+    void voidInput() {
+//        NotificationUtils.timeReminder(this);
     }
 
     private void initNavigationDrawer() {

@@ -5,9 +5,12 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -249,27 +252,34 @@ public class EditTimeFragment extends Fragment {
     //save or update data
     private void saveTask() {
         String task = taskEt.getText().toString().trim();
-        Date date = new Date(pickedYear - 1900, pickedMonth, pickedDay, pickedHour, pickedMinute);
-        long timeInMilliseconds = date.getTime();
 
         if (!TextUtils.isEmpty(task)) {
-            ContentValues values = new ContentValues();
-            values.put(TimeEntry.COLUMN_NAME_TASK, task);
-            values.put(TimeEntry.COLUMN_NAME_MILLISECOND, timeInMilliseconds);
-            values.put(TimeEntry.COLUMN_NAME_HAS_TIME, hasTime);
-            values.put(TimeEntry.COLUMN_NAME_TASK_DONE, DATABASE_FALSE);
+            ContentValues values = addContentValues(task);
 
              if (itemId > 0) {
                  Uri uri = Uri.withAppendedPath(TimeEntry.CONTENT_URL, String.valueOf(itemId));
                  getContext().getContentResolver().update(uri, values, null, null);
-             } else {
+            } else {
                  getContext().getContentResolver().insert(TimeEntry.CONTENT_URL, values);
-             }
+            }
             getActivity().finish();
             showToast("Reminder Saved");
         } else {
             showToast("Please add a task");
         }
+    }
+
+    public ContentValues addContentValues(String task) {
+        Date date = new Date(pickedYear - 1900, pickedMonth, pickedDay, pickedHour, pickedMinute);
+        long timeInMilliseconds = date.getTime();
+
+        ContentValues values = new ContentValues();
+        values.put(TimeEntry.COLUMN_NAME_TASK, task);
+        values.put(TimeEntry.COLUMN_NAME_MILLISECOND, timeInMilliseconds);
+        values.put(TimeEntry.COLUMN_NAME_HAS_TIME, hasTime);
+        values.put(TimeEntry.COLUMN_NAME_TASK_DONE, DATABASE_FALSE);
+
+        return values;
     }
 
     @Override

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.xianwei.smartreminder.R;
 import com.xianwei.smartreminder.adapter.TimeReminderAdapter;
 import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
+import com.xianwei.smartreminder.util.NotificationUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,6 +83,27 @@ public class TimeReminderListFragment extends Fragment
         timeReminderAdapter = new TimeReminderAdapter(getContext());
         reminderRecyclerView.setAdapter(timeReminderAdapter);
         timeReminderAdapter.swapCursor(newCursor);
+        setAlarm(newCursor);
+    }
+
+    //set alarm to trigger notification service
+    private void setAlarm(Cursor cursor) {
+        if (cursor == null || cursor.getCount() == 0) return;
+
+        long currentMilliseconds = System.currentTimeMillis();
+        long milliseconds;
+        while (cursor.moveToNext()) {
+            int hasTime = cursor.
+                    getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_HAS_TIME));
+            milliseconds = cursor.
+                    getLong(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_MILLISECOND));
+            if (hasTime == DATABASE_TRUE && milliseconds >= currentMilliseconds) {
+                String task = cursor.
+                        getString(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK));
+                NotificationUtils.setupNotificationService(getContext(), milliseconds, task);
+                break;
+            }
+        }
     }
 
     @Override

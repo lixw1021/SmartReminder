@@ -46,7 +46,7 @@
             android:src="@drawable/ic_add" />
 
         <ImageButton
-            android:id="@+id/iv_voice_input"
+            android:id="@+id/ib_voice_input"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_gravity="bottom"
