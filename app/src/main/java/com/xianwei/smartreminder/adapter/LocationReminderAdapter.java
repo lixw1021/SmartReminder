@@ -1,15 +1,22 @@
 package com.xianwei.smartreminder.adapter;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.xianwei.smartreminder.EditActivity;
 import com.xianwei.smartreminder.R;
+import com.xianwei.smartreminder.data.ReminderContract;
 import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
 
 import butterknife.BindView;
@@ -20,6 +27,8 @@ import butterknife.ButterKnife;
  */
 
 public class LocationReminderAdapter extends RecyclerView.Adapter<LocationReminderAdapter.ViewHolder> {
+    private static int DATABASE_FALSE = 0;
+    private static int DATABASE_TRUE = 1;
     private Context context;
     private Cursor cursor;
 
@@ -34,15 +43,39 @@ public class LocationReminderAdapter extends RecyclerView.Adapter<LocationRemind
     }
 
     @Override
-    public void onBindViewHolder(LocationReminderAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final LocationReminderAdapter.ViewHolder holder, int position) {
         if (cursor == null || cursor.getCount() == 0) return;
         cursor.moveToPosition(position);
+        final int id = cursor.getInt(
+                cursor.getColumnIndexOrThrow(LocationEntry._ID));
         String task = cursor.getString(
                 cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_TASK));
         String locationName = cursor.getString(
                 cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_NAME));
+        int taskDone = cursor.getInt(
+                cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_TASK_DONE));
+
+        holder.checkBox.setChecked(taskDone == DATABASE_TRUE);
+        holder.itemId = id;
         holder.task.setText(task);
         holder.location.setText(locationName);
+
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.checkBox.isChecked()) {
+                    Uri itemUri = ContentUris.withAppendedId(LocationEntry.CONTENT_URL, id );
+                    updateItem(itemUri);
+                    Toast.makeText(context, "Task finished", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void updateItem(Uri itemUri) {
+        ContentValues values = new ContentValues();
+        values.put(LocationEntry.COLUMN_NAME_TASK_DONE, DATABASE_TRUE);
+        context.getContentResolver().update(itemUri, values, null, null );
     }
 
     @Override
@@ -65,9 +98,20 @@ public class LocationReminderAdapter extends RecyclerView.Adapter<LocationRemind
         TextView location;
         @BindView(R.id.checkbox_location_reminder)
         CheckBox checkBox;
+        int itemId;
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, EditActivity.class);
+                    intent.putExtra("itemId", itemId);
+                    intent.putExtra("editFragment", "locationEdit");
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }

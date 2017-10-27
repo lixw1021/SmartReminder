@@ -3,6 +3,8 @@ package com.xianwei.smartreminder.fragment;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -45,6 +47,10 @@ public class EditLocationFragment extends Fragment {
     private static final String TAG = EditActivity.class.getSimpleName();
     private static final int PLACE_PICKER_REQUEST = 1;
     private String placeId;
+    private Bundle bundle;
+    private int itemId;
+    private GeoDataClient mGeoDataClient;
+    private PlaceDetectionClient mPlaceDetectionClient;
 
     public EditLocationFragment() {
         // Required empty public constructor
@@ -58,7 +64,54 @@ public class EditLocationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_location, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
+        bundle = this.getArguments();
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (bundle != null) {
+            itemId = bundle.getInt("itemId");
+            setupItemInfo(itemId);
+        }
+    }
+
+    private void setupItemInfo(int itemId) {
+        Cursor cursor = queryData(itemId);
+        String task = cursor.getString(
+                cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_TASK));
+        String locationName = cursor.getString(
+                cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_NAME));
+        String locationId = cursor.getString(
+                cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_ID));
+
+        locationTaskEt.setText(task);
+        locationNameEt.setText(locationName);
+        mGeoDataClient.getPlaceById(locationId).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
+            @Override
+            public void onComplete( Task<PlaceBufferResponse> task) {
+                if (task.isSuccessful()) {
+                    PlaceBufferResponse places = task.getResult();
+                    Place myPlace = places.get(0);
+                    Log.i(TAG, "Place found: " + myPlace.getName());
+                    places.release();
+                } else {
+                    Log.e(TAG, "Place not found.");
+                }
+            }
+        });
+    }
+
+    private Cursor queryData(int itemId) {
+        Uri uri = Uri.withAppendedPath(LocationEntry.CONTENT_URL, String.valueOf(itemId));
+        String[] project = new String[]{
+                LocationEntry._ID,
+                LocationEntry.COLUMN_NAME_TASK,
+                LocationEntry.COLUMN_NAME_LOCATION_NAME,
+                LocationEntry.COLUMN_NAME_LOCATION_ID,
+                LocationEntry.COLUMN_NAME_TASK_DONE};
+        return getContext().getContentResolver().query(uri, project, null, null, null);
     }
 
     @OnClick(R.id.tv_location)
@@ -112,7 +165,7 @@ public class EditLocationFragment extends Fragment {
             toast("Please add a task");
         } else if (TextUtils.isEmpty(locationName)) {
             toast("Please add a place name");
-        } else if (TextUtils.isEmpty(placeId)){
+        } else if (TextUtils.isEmpty(placeId)) {
             toast("Please pick a place");
         } else {
             ContentValues values = new ContentValues();

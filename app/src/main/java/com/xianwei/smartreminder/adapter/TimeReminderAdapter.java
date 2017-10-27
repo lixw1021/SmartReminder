@@ -121,6 +121,7 @@ public class TimeReminderAdapter extends RecyclerView.Adapter<TimeReminderAdapte
                 public void onClick(View v) {
                     Intent intent = new Intent(context, EditActivity.class);
                     intent.putExtra("itemId", itemId);
+                    intent.putExtra("editFragment", "timeEdit");
                     context.startActivity(intent);
                 }
             });

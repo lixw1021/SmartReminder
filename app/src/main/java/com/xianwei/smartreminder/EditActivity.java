@@ -44,7 +44,7 @@ public class EditActivity extends AppCompatActivity {
         if (intent.hasExtra("pageId") && savedInstanceState == null) {
             toolbar.setTitle("New Task");
             setupFragment(intent);
-        } else if (intent.hasExtra("itemId") && savedInstanceState == null) {
+        } else if (intent.hasExtra("editFragment") && savedInstanceState == null) {
             toolbar.setTitle("Edit Task");
             setupEditFragment(intent);
         }
@@ -62,8 +62,9 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void setupEditFragment(Intent intent) {
+        String name = intent.getStringExtra("editFragment");
+        fragment = (name.equals("timeEdit")) ? new EditTimeFragment() : new EditLocationFragment();
         Bundle bundle = intent.getExtras();
-        EditTimeFragment fragment = new EditTimeFragment();
         fragment.setArguments(bundle);
         getSupportFragmentManager()
                 .beginTransaction()
