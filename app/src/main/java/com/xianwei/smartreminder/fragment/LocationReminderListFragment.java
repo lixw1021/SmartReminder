@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.xianwei.smartreminder.R;
 import com.xianwei.smartreminder.adapter.LocationReminderAdapter;
-import com.xianwei.smartreminder.data.ReminderContract;
+import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,37 +51,32 @@ public class LocationReminderListFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reminder_list, container, false);
         ButterKnife.bind(this, view);
+        reminderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        locationReminderAdapter = new LocationReminderAdapter(getContext());
+        reminderRecyclerView.setAdapter(locationReminderAdapter);
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        reminderRecyclerView.setLayoutManager(manager);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection = new String[]{
-                ReminderContract.LocationEntry._ID,
-                ReminderContract.LocationEntry.COLUMN_NAME_TASK,
-                ReminderContract.LocationEntry.COLUMN_NAME_LOCATION_ID,
-                ReminderContract.LocationEntry.COLUMN_NAME_TASK_DONE};
+                LocationEntry._ID,
+                LocationEntry.COLUMN_NAME_TASK,
+                LocationEntry.COLUMN_NAME_LOCATION_NAME,
+                LocationEntry.COLUMN_NAME_LOCATION_ID,
+                LocationEntry.COLUMN_NAME_TASK_DONE};
 
         return new CursorLoader(
                 getContext(),
-                ReminderContract.LocationEntry.CONTENT_URL,
+                LocationEntry.CONTENT_URL,
                 projection,
-                ReminderContract.LocationEntry.COLUMN_NAME_TASK_DONE + "=?",
+                LocationEntry.COLUMN_NAME_TASK_DONE + "=?",
                 new String[]{String.valueOf(DATABASE_FALSE)},
                 null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor newCursor) {
-        locationReminderAdapter = new LocationReminderAdapter(getContext());
-        reminderRecyclerView.setAdapter(locationReminderAdapter);
         locationReminderAdapter.swapCursor(newCursor);
     }
 

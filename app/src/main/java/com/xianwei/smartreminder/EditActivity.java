@@ -63,7 +63,6 @@ public class EditActivity extends AppCompatActivity {
 
     private void setupEditFragment(Intent intent) {
         Bundle bundle = intent.getExtras();
-        Log.i("12345bundle=null", String.valueOf(bundle == null));
         EditTimeFragment fragment = new EditTimeFragment();
         fragment.setArguments(bundle);
         getSupportFragmentManager()

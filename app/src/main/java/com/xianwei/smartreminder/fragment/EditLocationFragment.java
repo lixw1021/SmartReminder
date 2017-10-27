@@ -37,11 +37,14 @@ public class EditLocationFragment extends Fragment {
 
     @BindView(R.id.et_location_task)
     EditText locationTaskEt;
+    @BindView(R.id.et_location_Name)
+    EditText locationNameEt;
     @BindView(R.id.tv_location)
     TextView locationPickerTv;
 
     private static final String TAG = EditActivity.class.getSimpleName();
     private static final int PLACE_PICKER_REQUEST = 1;
+    private String placeId;
 
     public EditLocationFragment() {
         // Required empty public constructor
@@ -84,9 +87,9 @@ public class EditLocationFragment extends Fragment {
 
             String placeName = place.getName().toString();
             String placeAddress = place.getAddress().toString();
-            String placeID = place.getId();
+            placeId = place.getId();
 
-            locationPickerTv.setText(placeID);
+            locationPickerTv.setText(placeName + "\n" + placeAddress);
         }
     }
 
@@ -104,14 +107,17 @@ public class EditLocationFragment extends Fragment {
 
     private void saveTask() {
         String task = locationTaskEt.getText().toString().trim();
-        String placeId = locationPickerTv.getText().toString().trim();
+        String locationName = locationNameEt.getText().toString().trim();
         if (TextUtils.isEmpty(task)) {
             toast("Please add a task");
-        } else if (TextUtils.isEmpty(placeId)) {
-            toast("please add a place");
+        } else if (TextUtils.isEmpty(locationName)) {
+            toast("Please add a place name");
+        } else if (TextUtils.isEmpty(placeId)){
+            toast("Please pick a place");
         } else {
             ContentValues values = new ContentValues();
             values.put(LocationEntry.COLUMN_NAME_TASK, task);
+            values.put(LocationEntry.COLUMN_NAME_LOCATION_NAME, locationName);
             values.put(LocationEntry.COLUMN_NAME_LOCATION_ID, placeId);
             getContext().getContentResolver().insert(LocationEntry.CONTENT_URL, values);
             getActivity().finish();

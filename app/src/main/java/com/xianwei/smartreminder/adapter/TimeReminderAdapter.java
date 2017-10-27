@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,7 @@ public class TimeReminderAdapter extends RecyclerView.Adapter<TimeReminderAdapte
         String task = cursor.getString(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK));
         long millisecond = cursor.getLong(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_MILLISECOND));
         int hasTime = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_HAS_TIME));
+        int taskDone = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK_DONE));
 
         if (millisecond > 0) {
             DateAndTime dateAndTime = TimeUtil.millisecondToDateAndTime(millisecond);
@@ -64,6 +66,7 @@ public class TimeReminderAdapter extends RecyclerView.Adapter<TimeReminderAdapte
             }
         }
 
+        holder.checkBox.setChecked(taskDone == DATABASE_TRUE);
         holder.itemId = id;
         holder.task.setText(task);
 

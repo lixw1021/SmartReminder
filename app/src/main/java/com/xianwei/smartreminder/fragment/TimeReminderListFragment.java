@@ -56,14 +56,10 @@ public class TimeReminderListFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reminder_list, container, false);
         ButterKnife.bind(this, view);
+        reminderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        timeReminderAdapter = new TimeReminderAdapter(getContext());
+        reminderRecyclerView.setAdapter(timeReminderAdapter);
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        reminderRecyclerView.setLayoutManager(manager);
     }
 
     @Override
@@ -86,8 +82,6 @@ public class TimeReminderListFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor newCursor) {
-        timeReminderAdapter = new TimeReminderAdapter(getContext());
-        reminderRecyclerView.setAdapter(timeReminderAdapter);
         timeReminderAdapter.swapCursor(newCursor);
         setAlarm(newCursor);
     }

@@ -171,6 +171,11 @@ public class ReminderProvider extends ContentProvider {
             if (TextUtils.isEmpty(task)) {
                 throw new IllegalArgumentException("update is not supported for :" +uri);
             }
+        }  else if (values.containsKey(LocationEntry.COLUMN_NAME_LOCATION_NAME)) {
+            String locationName = values.getAsString(LocationEntry.COLUMN_NAME_LOCATION_NAME);
+            if (TextUtils.isEmpty(locationName)) {
+                throw new IllegalArgumentException("update is not supported for :" +uri);
+            }
         } else if (values.containsKey(LocationEntry.COLUMN_NAME_LOCATION_ID)) {
             String locationId = values.getAsString(LocationEntry.COLUMN_NAME_LOCATION_ID);
             if (TextUtils.isEmpty(locationId)) {

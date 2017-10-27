@@ -25,16 +25,37 @@
         android:textSize="@dimen/item_subtitle_size" />
 
     <TextView
+        android:layout_below="@id/et_location_task"
+        android:id="@+id/tv_location_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Location Name :"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <EditText
+        android:id="@+id/et_location_Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_location_name"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:hint="Name your location"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <TextView
         android:id="@+id/tv_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_location_task"
+        android:layout_below="@+id/et_location_Name"
         android:layout_marginStart="@dimen/margin_horizontal"
         android:layout_marginTop="16dp"
         android:drawablePadding="16dp"
         android:drawableStart="@drawable/ic_location"
         android:gravity="center_vertical"
-        android:text="Set reminder location"
+        android:text="Pick reminder location"
         android:textSize="@dimen/item_subtitle_size" />
 
     <LinearLayout

@@ -39,10 +39,10 @@ public class LocationReminderAdapter extends RecyclerView.Adapter<LocationRemind
         cursor.moveToPosition(position);
         String task = cursor.getString(
                 cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_TASK));
-        String placeId = cursor.getString(
-                cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_ID));
+        String locationName = cursor.getString(
+                cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_NAME));
         holder.task.setText(task);
-        holder.location.setText(placeId);
+        holder.location.setText(locationName);
     }
 
     @Override
