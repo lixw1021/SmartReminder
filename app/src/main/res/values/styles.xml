@@ -17,7 +17,7 @@
     </style>
 
     <style name="reminder_subtitle">
-        <item name="android:layout_width">wrap_content</item>>
+        <item name="android:layout_width">0dp</item>>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/item_subtitle_size</item>
     </style>

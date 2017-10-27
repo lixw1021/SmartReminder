@@ -1,7 +1,6 @@
 package com.xianwei.smartreminder.fragment;
 
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +10,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +32,9 @@ public class TimeReminderListFragment extends Fragment
     @BindView(R.id.reminder_list)
     RecyclerView reminderRecyclerView;
 
-    private static int DATABASE_FALSE = 0;
-    private static int DATABASE_TRUE = 1;
+    private static final int DATABASE_FALSE = 0;
+    private static final int DATABASE_TRUE = 1;
+    private static final int TIME_LOADER_ID = 100;
     private static final String ID_KEY = "id";
     private static final String MILLISECONDS_KEY = "milliseconds";
     private static final String TASK_KEY = "task";
@@ -48,7 +47,7 @@ public class TimeReminderListFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(TIME_LOADER_ID, null, this);
     }
 
     @Override
@@ -69,13 +68,15 @@ public class TimeReminderListFragment extends Fragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = new String[]{TimeEntry._ID,
+        String[] projection = new String[]{
+                TimeEntry._ID,
                 TimeEntry.COLUMN_NAME_TASK,
                 TimeEntry.COLUMN_NAME_MILLISECOND,
                 TimeEntry.COLUMN_NAME_HAS_TIME,
                 TimeEntry.COLUMN_NAME_TASK_DONE};
 
-        return new CursorLoader(getContext(),
+        return new CursorLoader(
+                getContext(),
                 TimeEntry.CONTENT_URL,
                 projection,
                 TimeEntry.COLUMN_NAME_TASK_DONE + "=?",

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="item_title_size">25sp</dimen>
-    <dimen name="item_subtitle_size">16sp</dimen>
+    <dimen name="item_title_size">22sp</dimen>
+    <dimen name="item_subtitle_size">14sp</dimen>
     <dimen name="checkbox_size">30dp</dimen>
     <dimen name="margin_horizontal">8dp</dimen>
     <dimen name="margin_vertical">4dp</dimen>

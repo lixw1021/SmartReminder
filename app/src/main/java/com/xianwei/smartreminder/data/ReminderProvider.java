@@ -9,9 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
+import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
 /**
  * Created by xianwei li on 10/20/2017.
  */
@@ -19,17 +21,22 @@ import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
 public class ReminderProvider extends ContentProvider {
 
     public static final String LOG_TAG = ReminderProvider.class.getSimpleName();
-    private static final int REMINDER = 100;
-    private static final int REMINDER_ID = 101;
+    private static final int TIME_REMINDER = 100;
+    private static final int TIME_REMINDER_ID = 101;
+    private static final int LOCATION_REMINDER = 102;
+    private static final int LOCATION_REMINDER_ID = 103;
     public ReminderDbHelper reminderDbHelper;
 
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-
     static {
         uriMatcher.addURI(ReminderContract.CONTENT_AUTHORITY,
-                ReminderContract.PATH_TIME_REMINDER, REMINDER);
+                ReminderContract.PATH_TIME_REMINDER, TIME_REMINDER);
         uriMatcher.addURI(ReminderContract.CONTENT_AUTHORITY,
-                ReminderContract.PATH_TIME_REMINDER + "/#", REMINDER_ID);
+                ReminderContract.PATH_TIME_REMINDER + "/#", TIME_REMINDER_ID);
+        uriMatcher.addURI(ReminderContract.CONTENT_AUTHORITY,
+                ReminderContract.PATH_LOCATION_REMINDER, LOCATION_REMINDER);
+        uriMatcher.addURI(ReminderContract.CONTENT_AUTHORITY,
+                ReminderContract.PATH_LOCATION_REMINDER + "/#", LOCATION_REMINDER_ID);
     }
 
     @Override
@@ -45,14 +52,24 @@ public class ReminderProvider extends ContentProvider {
         SQLiteDatabase db = reminderDbHelper.getReadableDatabase();
         Cursor cursor;
         switch (uriMatcher.match(uri)) {
-            case REMINDER_ID:
+            case TIME_REMINDER_ID:
                 selection = TimeEntry._ID + "=?";
                 selectionArgs = new String[] {uri.getLastPathSegment()};
                 cursor = db.query(TimeEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
-            case REMINDER:
+            case TIME_REMINDER:
                 cursor = db.query(TimeEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
+            case LOCATION_REMINDER_ID:
+                selection = LocationEntry._ID + "=?";
+                selectionArgs = new String[] {uri.getLastPathSegment()};
+                cursor = db.query(LocationEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
+            case LOCATION_REMINDER:
+                cursor = db.query(LocationEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             default:
@@ -66,16 +83,18 @@ public class ReminderProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
         switch (uriMatcher.match(uri)) {
-            case REMINDER:
-                return insertReminder(uri, values);
+            case TIME_REMINDER:
+                return insertReminder(uri, values, TimeEntry.TABLE_NAME);
+            case LOCATION_REMINDER:
+                return insertReminder(uri, values, LocationEntry.TABLE_NAME);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for :" + uri);
         }
     }
 
-    private Uri insertReminder(Uri uri, ContentValues values) {
+    private Uri insertReminder(Uri uri, ContentValues values, String tableName) {
         SQLiteDatabase db = reminderDbHelper.getWritableDatabase();
-        long id = db.insert(TimeEntry.TABLE_NAME, null, values);
+        long id = db.insert(tableName, null, values);
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for :" + uri);
         }
@@ -89,13 +108,21 @@ public class ReminderProvider extends ContentProvider {
         SQLiteDatabase db = reminderDbHelper.getWritableDatabase();
         int rowDeleted;
         switch (uriMatcher.match(uri)) {
-            case REMINDER_ID:
+            case TIME_REMINDER_ID:
                 selection = TimeEntry._ID + "=?";
                 selectionArgs = new String[] {uri.getLastPathSegment()};
                 rowDeleted = db.delete(TimeEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            case REMINDER:
+            case TIME_REMINDER:
                 rowDeleted = db.delete(TimeEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case LOCATION_REMINDER_ID:
+                selection = LocationEntry._ID + "=?";
+                selectionArgs = new String[] {uri.getLastPathSegment()};
+                rowDeleted = db.delete(LocationEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case LOCATION_REMINDER:
+                rowDeleted = db.delete(LocationEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("delete is not supported for :" + uri);
@@ -110,10 +137,14 @@ public class ReminderProvider extends ContentProvider {
     public int update(@NonNull Uri uri, @Nullable ContentValues values,
                       @Nullable String selection, @Nullable String[] selectionArgs) {
         switch (uriMatcher.match(uri)) {
-            case REMINDER_ID:
+            case TIME_REMINDER_ID:
                 selection = TimeEntry._ID + "=?";
                 selectionArgs = new String[]{uri.getLastPathSegment()};
                 return updateTimeReminder(uri, values, selection, selectionArgs);
+            case LOCATION_REMINDER_ID:
+                selection = LocationEntry._ID + "=?";
+                selectionArgs = new String[] {uri.getLastPathSegment()};
+                return updateLocationReminder(uri, values, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("update is not support for :" + uri);
         }
@@ -128,6 +159,26 @@ public class ReminderProvider extends ContentProvider {
         }
         SQLiteDatabase db = reminderDbHelper.getWritableDatabase();
         int rowsUpdated = db.update(TimeEntry.TABLE_NAME, values, selection, selectionArgs);
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsUpdated;
+    }
+
+    private int updateLocationReminder(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        if (values.containsKey(LocationEntry.COLUMN_NAME_TASK)) {
+            String task = values.getAsString(LocationEntry.COLUMN_NAME_TASK);
+            if (TextUtils.isEmpty(task)) {
+                throw new IllegalArgumentException("update is not supported for :" +uri);
+            }
+        } else if (values.containsKey(LocationEntry.COLUMN_NAME_LOCATION_ID)) {
+            String locationId = values.getAsString(LocationEntry.COLUMN_NAME_LOCATION_ID);
+            if (TextUtils.isEmpty(locationId)) {
+                throw new IllegalArgumentException("update is not supported for :" +uri);
+            }
+        }
+        SQLiteDatabase db = reminderDbHelper.getWritableDatabase();
+        int rowsUpdated = db.update(LocationEntry.TABLE_NAME, values, selection, selectionArgs);
         if (rowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }

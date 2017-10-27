@@ -17,7 +17,7 @@
         <TextView
             android:id="@+id/tv_time_reminder_title"
             style="@style/reminder_title"
-            app:layout_constraintEnd_toStartOf="@id/checkbox_time_reminder"
+            app:layout_constraintEnd_toStartOf="@+id/checkbox_time_reminder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Go to Walmart" />
@@ -30,13 +30,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_time_reminder_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_time_reminder_title"
+            app:layout_constraintEnd_toStartOf="@+id/tv_task_date"
             tools:text="10:15 AM" />
 
         <TextView
             android:id="@+id/tv_task_date"
             style="@style/reminder_subtitle"
-            app:layout_constraintEnd_toStartOf="@id/checkbox_time_reminder"
-            app:layout_constraintStart_toEndOf="@id/tv_task_time"
+            app:layout_constraintEnd_toStartOf="@+id/checkbox_time_reminder"
+            app:layout_constraintStart_toEndOf="@+id/tv_task_time"
             app:layout_constraintTop_toTopOf="@+id/tv_task_time"
             tools:text="Sat,10-21-2017" />
 

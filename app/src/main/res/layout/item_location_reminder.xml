@@ -12,25 +12,26 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv_location_reminder_title"
+            android:id="@+id/tv_location_reminder_task"
             style="@style/reminder_title"
-            app:layout_constraintEnd_toStartOf="@+id/checkbox_time_reminder"
+            app:layout_constraintEnd_toStartOf="@+id/checkbox_location_reminder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Go to Walmart" />
 
         <TextView
-            android:id="@+id/tv_task_location"
+            android:id="@+id/tv_location"
             style="@style/reminder_subtitle"
             android:layout_marginBottom="@dimen/margin_vertical"
             android:layout_marginTop="@dimen/margin_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_location_reminder_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_location_reminder_title"
-            tools:text="walmaet, york, PA" />
+            app:layout_constraintEnd_toStartOf="@+id/checkbox_location_reminder"
+            app:layout_constraintStart_toStartOf="@id/tv_location_reminder_task"
+            app:layout_constraintTop_toBottomOf="@+id/tv_location_reminder_task"
+            tools:text="Walmart supercenter,  2801 E Market street" />
 
         <CheckBox
-            android:id="@+id/checkbox_time_reminder"
+            android:id="@+id/checkbox_location_reminder"
             android:layout_width="@dimen/checkbox_size"
             android:layout_height="@dimen/checkbox_size"
             android:layout_marginEnd="@dimen/margin_horizontal"

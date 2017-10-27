@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.xianwei.smartreminder.fragment.LocationReminderListFragment;
 import com.xianwei.smartreminder.fragment.TimeReminderListFragment;
 
 /**
@@ -24,7 +25,7 @@ public class ReminderPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new TimeReminderListFragment();
             case 1:
-                return new TimeReminderListFragment();
+                return new LocationReminderListFragment();
             default:
                 return null;
         }
