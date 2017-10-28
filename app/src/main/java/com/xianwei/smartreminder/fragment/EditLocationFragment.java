@@ -14,13 +14,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBufferResponse;
+import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.xianwei.smartreminder.EditActivity;
 import com.xianwei.smartreminder.R;
 import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
@@ -43,6 +50,8 @@ public class EditLocationFragment extends Fragment {
     EditText locationNameEt;
     @BindView(R.id.tv_location)
     TextView locationPickerTv;
+    @BindView(R.id.ib_delete)
+    ImageButton deleteBtn;
 
     private static final String TAG = EditActivity.class.getSimpleName();
     private static final int PLACE_PICKER_REQUEST = 1;
@@ -64,37 +73,40 @@ public class EditLocationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_location, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
+        mGeoDataClient = Places.getGeoDataClient(getContext(), null);
         bundle = this.getArguments();
+        if (bundle != null) {
+            itemId = bundle.getInt("itemId");
+            setupItemInfo(itemId);
+        }
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (bundle != null) {
-            itemId = bundle.getInt("itemId");
-            setupItemInfo(itemId);
-        }
     }
 
     private void setupItemInfo(int itemId) {
         Cursor cursor = queryData(itemId);
+        cursor.moveToNext();
         String task = cursor.getString(
                 cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_TASK));
         String locationName = cursor.getString(
                 cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_NAME));
-        String locationId = cursor.getString(
+        placeId = cursor.getString(
                 cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_ID));
 
+        deleteBtn.setVisibility(View.VISIBLE);
         locationTaskEt.setText(task);
         locationNameEt.setText(locationName);
-        mGeoDataClient.getPlaceById(locationId).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
+        mGeoDataClient.getPlaceById(placeId).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
             @Override
             public void onComplete( Task<PlaceBufferResponse> task) {
                 if (task.isSuccessful()) {
                     PlaceBufferResponse places = task.getResult();
-                    Place myPlace = places.get(0);
-                    Log.i(TAG, "Place found: " + myPlace.getName());
+                    Place place = places.get(0);
+                    locationPickerTv.setText(place.getName() + "\n" + place.getAddress());
                     places.release();
                 } else {
                     Log.e(TAG, "Place not found.");
@@ -172,9 +184,21 @@ public class EditLocationFragment extends Fragment {
             values.put(LocationEntry.COLUMN_NAME_TASK, task);
             values.put(LocationEntry.COLUMN_NAME_LOCATION_NAME, locationName);
             values.put(LocationEntry.COLUMN_NAME_LOCATION_ID, placeId);
-            getContext().getContentResolver().insert(LocationEntry.CONTENT_URL, values);
+            if (itemId > 0) {
+                Uri uri = Uri.withAppendedPath(LocationEntry.CONTENT_URL, String.valueOf(itemId));
+                getContext().getContentResolver().update(uri, values, null, null);
+            } else {
+                getContext().getContentResolver().insert(LocationEntry.CONTENT_URL, values);
+            }
             getActivity().finish();
         }
+    }
+
+    @OnClick(R.id.ib_delete)
+    void deleteItem() {
+        Uri uri = Uri.withAppendedPath(LocationEntry.CONTENT_URL, String.valueOf(itemId));
+        getContext().getContentResolver().delete(uri, null, null);
+        getActivity().finish();
     }
 
     public void toast(String message) {

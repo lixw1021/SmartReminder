@@ -81,16 +81,11 @@ public class EditTimeFragment extends Fragment {
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         bundle = this.getArguments();
-        return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         if (bundle != null) {
             itemId = bundle.getInt("itemId");
             setupItemInfo(itemId);
         }
+        return view;
     }
 
     private void setupItemInfo(int itemId) {

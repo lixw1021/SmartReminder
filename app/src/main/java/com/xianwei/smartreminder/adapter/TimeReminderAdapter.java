@@ -63,7 +63,12 @@ public class TimeReminderAdapter extends RecyclerView.Adapter<TimeReminderAdapte
                     dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDay()));
             if (hasTime == DATABASE_TRUE) {
                 holder.time.setText(TimeUtil.timeDisplay(dateAndTime.getHour(), dateAndTime.getMinute()));
+            } else {
+                holder.time.setText(null);
             }
+        } else {
+            holder.date.setText(null);
+            holder.time.setText(null);
         }
 
         holder.checkBox.setChecked(taskDone == DATABASE_TRUE);
