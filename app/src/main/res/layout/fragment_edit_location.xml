@@ -25,10 +25,10 @@
         android:textSize="@dimen/item_subtitle_size" />
 
     <TextView
-        android:layout_below="@id/et_location_task"
         android:id="@+id/tv_location_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/et_location_task"
         android:layout_marginStart="@dimen/margin_horizontal"
         android:layout_marginTop="16dp"
         android:text="Location Name :"
@@ -36,20 +36,42 @@
         android:textSize="@dimen/item_subtitle_size" />
 
     <EditText
-        android:id="@+id/et_location_Name"
+        android:id="@+id/et_location_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_location_name"
         android:layout_marginEnd="@dimen/margin_horizontal"
         android:layout_marginStart="@dimen/margin_horizontal"
-        android:hint="Name your location"
+        android:hint="Enter location name"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <TextView
+        android:id="@+id/tv_location_reminder_radius"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_location_name"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Reminder radius ( m ) :"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <EditText
+        android:id="@+id/et_location_reminder_radius"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_location_reminder_radius"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:hint="Enter radius : 20 ~ 10000"
+        android:inputType="number"
         android:textSize="@dimen/item_subtitle_size" />
 
     <TextView
         android:id="@+id/tv_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_location_Name"
+        android:layout_below="@+id/et_location_reminder_radius"
         android:layout_marginStart="@dimen/margin_horizontal"
         android:layout_marginTop="16dp"
         android:drawablePadding="16dp"
@@ -69,7 +91,7 @@
         android:layout_marginTop="40dp"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_delete"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"

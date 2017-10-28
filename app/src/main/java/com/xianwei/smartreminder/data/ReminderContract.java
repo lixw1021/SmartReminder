@@ -36,6 +36,7 @@ public final class ReminderContract {
         public static final String _ID = BaseColumns._ID;
         public static final String COLUMN_NAME_TASK = "task";
         public static final String COLUMN_NAME_LOCATION_NAME = "location_name";
+        public static final String COLUMN_NAME_LOCATION_RADIUS = "location_radius";
         public static final String COLUMN_NAME_LOCATION_ID = "Location_id";
         public static final String COLUMN_NAME_TASK_DONE = "task_done";
     }

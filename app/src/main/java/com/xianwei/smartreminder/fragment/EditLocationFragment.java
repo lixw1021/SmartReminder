@@ -46,10 +46,12 @@ public class EditLocationFragment extends Fragment {
 
     @BindView(R.id.et_location_task)
     EditText locationTaskEt;
-    @BindView(R.id.et_location_Name)
+    @BindView(R.id.et_location_name)
     EditText locationNameEt;
     @BindView(R.id.tv_location)
     TextView locationPickerTv;
+    @BindView(R.id.et_location_reminder_radius)
+    EditText reminderRadiusEt;
     @BindView(R.id.ib_delete)
     ImageButton deleteBtn;
 
@@ -58,7 +60,7 @@ public class EditLocationFragment extends Fragment {
     private String placeId;
     private Bundle bundle;
     private int itemId;
-    private GeoDataClient mGeoDataClient;
+    private GeoDataClient geoDataClient;
     private PlaceDetectionClient mPlaceDetectionClient;
 
     public EditLocationFragment() {
@@ -73,18 +75,13 @@ public class EditLocationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_location, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-        mGeoDataClient = Places.getGeoDataClient(getContext(), null);
+        geoDataClient = Places.getGeoDataClient(getContext(), null);
         bundle = this.getArguments();
         if (bundle != null) {
             itemId = bundle.getInt("itemId");
             setupItemInfo(itemId);
         }
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 
     private void setupItemInfo(int itemId) {
@@ -94,13 +91,16 @@ public class EditLocationFragment extends Fragment {
                 cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_TASK));
         String locationName = cursor.getString(
                 cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_NAME));
+        int radius = cursor.getInt(
+                cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_RADIUS));
         placeId = cursor.getString(
                 cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_ID));
 
         deleteBtn.setVisibility(View.VISIBLE);
         locationTaskEt.setText(task);
         locationNameEt.setText(locationName);
-        mGeoDataClient.getPlaceById(placeId).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
+        reminderRadiusEt.setText(String.valueOf(radius));
+        geoDataClient.getPlaceById(placeId).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
             @Override
             public void onComplete( Task<PlaceBufferResponse> task) {
                 if (task.isSuccessful()) {
@@ -121,6 +121,7 @@ public class EditLocationFragment extends Fragment {
                 LocationEntry._ID,
                 LocationEntry.COLUMN_NAME_TASK,
                 LocationEntry.COLUMN_NAME_LOCATION_NAME,
+                LocationEntry.COLUMN_NAME_LOCATION_RADIUS,
                 LocationEntry.COLUMN_NAME_LOCATION_ID,
                 LocationEntry.COLUMN_NAME_TASK_DONE};
         return getContext().getContentResolver().query(uri, project, null, null, null);
@@ -173,16 +174,23 @@ public class EditLocationFragment extends Fragment {
     private void saveTask() {
         String task = locationTaskEt.getText().toString().trim();
         String locationName = locationNameEt.getText().toString().trim();
+        String stringRadius = reminderRadiusEt.getText().toString().trim();
         if (TextUtils.isEmpty(task)) {
             toast("Please add a task");
         } else if (TextUtils.isEmpty(locationName)) {
             toast("Please add a place name");
         } else if (TextUtils.isEmpty(placeId)) {
             toast("Please pick a place");
-        } else {
+        } else if (TextUtils.isEmpty(stringRadius)){
+            toast("Please enter a radius");
+        } else if (Integer.parseInt(stringRadius) < 20 || Integer.parseInt(stringRadius) > 10000 ) {
+            toast("Please enter a valid radius");
+        }else {
+            int radius = Integer.parseInt(stringRadius);
             ContentValues values = new ContentValues();
             values.put(LocationEntry.COLUMN_NAME_TASK, task);
             values.put(LocationEntry.COLUMN_NAME_LOCATION_NAME, locationName);
+            values.put(LocationEntry.COLUMN_NAME_LOCATION_RADIUS, radius);
             values.put(LocationEntry.COLUMN_NAME_LOCATION_ID, placeId);
             if (itemId > 0) {
                 Uri uri = Uri.withAppendedPath(LocationEntry.CONTENT_URL, String.valueOf(itemId));

@@ -27,6 +27,7 @@ public class ReminderDbHelper extends SQLiteOpenHelper {
                     LocationEntry._ID + " INTEGER PRIMARY KEY," +
                     LocationEntry.COLUMN_NAME_TASK + " TEXT NOT NULL," +
                     LocationEntry.COLUMN_NAME_LOCATION_NAME + " TEXT NOT NULL," +
+                    LocationEntry.COLUMN_NAME_LOCATION_RADIUS + " INTEGER NOT NULL DEFAULT 50," +
                     LocationEntry.COLUMN_NAME_LOCATION_ID + " TEXT NOT NULL, " +
                     LocationEntry.COLUMN_NAME_TASK_DONE + " INTEGER NOT NULL DEFAULT 0)";
 

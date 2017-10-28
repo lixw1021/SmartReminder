@@ -63,6 +63,7 @@ public class LocationReminderListFragment extends Fragment
                 LocationEntry._ID,
                 LocationEntry.COLUMN_NAME_TASK,
                 LocationEntry.COLUMN_NAME_LOCATION_NAME,
+                LocationEntry.COLUMN_NAME_LOCATION_RADIUS,
                 LocationEntry.COLUMN_NAME_LOCATION_ID,
                 LocationEntry.COLUMN_NAME_TASK_DONE};
 
