@@ -35,6 +35,19 @@ public class NotificationUtils {
         manger.cancel(NotificationId);
     }
 
+    public static void locationReminder(Context context) {
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_location)
+                .setContentText("location task")
+                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setContentIntent(contentIntent(context, 10000))
+                .setAutoCancel(true);
+
+        NotificationManager manager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        manager.notify(10000, notificationBuilder.build());
+    }
 
     public static void timeReminder(Context context, Intent intent) {
         String task = intent.getStringExtra(TASK_KEY);
@@ -66,7 +79,7 @@ public class NotificationUtils {
     private static Action taskDone(Context context, Intent intent) {
         int taskId = intent.getIntExtra(ID_KEY, 0);
         Intent taskDoneIntent = new Intent(context, ReminderIntentService.class);
-        taskDoneIntent.setAction(ReminderTasks.ACTION_TASK_DONE);
+        taskDoneIntent.setAction(ReminderTasks.ACTION_TIME_TASK_DONE);
         taskDoneIntent.putExtras(intent);
         PendingIntent taskDonePendingIntent = PendingIntent.getService(
                 context,
@@ -80,7 +93,7 @@ public class NotificationUtils {
     private static Action taskPostpone(Context context, Intent intent) {
         int taskId = intent.getIntExtra(ID_KEY, 0);
         Intent taskPostponeIntent = new Intent(context, ReminderIntentService.class);
-        taskPostponeIntent.setAction(ReminderTasks.ACTION_TASK_POSTPONE);
+        taskPostponeIntent.setAction(ReminderTasks.ACTION_TIME_TASK_POSTPONE);
         taskPostponeIntent.putExtras(intent);
         PendingIntent taskPostponePendingIntent = PendingIntent.getService(
                 context,
@@ -95,7 +108,7 @@ public class NotificationUtils {
     public static void setupNotificationService(Context context, Bundle bundle) {
         long milliseconds = bundle.getLong(MILLISECONDS_KEY);
         Intent intent = new Intent(context, ReminderIntentService.class);
-        intent.setAction(ReminderTasks.ACTION_TASK_REMINDER);
+        intent.setAction(ReminderTasks.ACTION_TIME_TASK_REMINDER);
         intent.putExtras(bundle);
         PendingIntent servicePendingIntent = PendingIntent.getService(
                 context,

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
 import com.xianwei.smartreminder.util.NotificationUtils;
@@ -16,9 +17,10 @@ import com.xianwei.smartreminder.util.NotificationUtils;
 
 public class ReminderTasks {
 
-    public static final String ACTION_TASK_DONE = "task-done";
-    public static final String ACTION_TASK_POSTPONE = "task-postpone";
-    public static final String ACTION_TASK_REMINDER = "task-reminder";
+    public static final String ACTION_TIME_TASK_DONE = "task-done";
+    public static final String ACTION_TIME_TASK_POSTPONE = "task-postpone";
+    public static final String ACTION_TIME_TASK_REMINDER = "time-reminder";
+    public static final String ACTION_LOCATION_TASK_REMINDER = "location-reminder";
     private static final String ID_KEY = "id";
     private static final String MILLISECONDS_KEY = "milliseconds";
     private static final String TASK_KEY = "task";
@@ -28,19 +30,24 @@ public class ReminderTasks {
 
     public static void executeTask(Context context, Intent intent) {
         String action = intent.getAction();
-        if (ACTION_TASK_DONE.equals(action)) {
+        if (ACTION_TIME_TASK_DONE.equals(action)) {
             int id = intent.getIntExtra(ID_KEY, -1);
             finishTask(context, id);
 
-        } else if (ACTION_TASK_POSTPONE.equals(action)) {
+        } else if (ACTION_TIME_TASK_POSTPONE.equals(action)) {
             int id = intent.getIntExtra(ID_KEY, -1);
             long milliseconds = intent.getLongExtra(MILLISECONDS_KEY, 0);
             postponeTask(context, id, milliseconds);
 
-        } else if (ACTION_TASK_REMINDER.equals(action)) {
+        } else if (ACTION_TIME_TASK_REMINDER.equals(action)) {
+            Log.i("12345","time notification push");
             NotificationUtils.timeReminder(context, intent);
             long milliseconds = intent.getLongExtra(MILLISECONDS_KEY, 0);
             setupNextNotification(context, milliseconds);
+
+        } else if (ACTION_LOCATION_TASK_REMINDER.equals(action)) {
+            Log.i("12345","location notification push");
+            NotificationUtils.locationReminder(context);
         }
     }
 
