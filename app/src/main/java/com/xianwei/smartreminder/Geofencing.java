@@ -1,16 +1,20 @@
 package com.xianwei.smartreminder;
 
+import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
@@ -38,6 +42,7 @@ public class Geofencing implements ResultCallback {
     private PendingIntent geofencePendingIntent;
     private GoogleApiClient googleApiClient;
     private Context context;
+    private GeofencingClient geofencingClient;
 
     public Geofencing(Context context, GoogleApiClient client) {
         this.context = context;
@@ -51,32 +56,63 @@ public class Geofencing implements ResultCallback {
                 geofenceList == null || geofenceList.size() == 0) {
             return;
         }
-        try {
-            LocationServices.GeofencingApi.addGeofences(
-                    googleApiClient,
-                    getGeofencingRequest(),
-                    getGeofencePendingIntent()
-            ).setResultCallback(this);
-        } catch (SecurityException securityException) {
-            Log.e(TAG, securityException.getMessage());
+        geofencingClient = LocationServices.getGeofencingClient(context);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
         }
+        geofencingClient.addGeofences(getGeofencingRequest(), geofencePendingIntent);
     }
 
     public void unRegisterAllGeofences() {
         if (googleApiClient == null || !googleApiClient.isConnected()) {
             return;
         }
-        try {
-            LocationServices.GeofencingApi.removeGeofences(
-                    googleApiClient,
-                    // This is the same pending intent that was used in registerGeofences
-                    getGeofencePendingIntent()
-            ).setResultCallback(this);
-        } catch (SecurityException securityException) {
-            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
-            Log.e(TAG, securityException.getMessage());
-        }
+        geofencingClient = LocationServices.getGeofencingClient(context);
+        geofencingClient.removeGeofences(getGeofencePendingIntent());
     }
+
+
+
+
+
+//    public void registerAllGeofences() {
+//        if (googleApiClient == null || !googleApiClient.isConnected() ||
+//                geofenceList == null || geofenceList.size() == 0) {
+//            return;
+//        }
+//        try {
+//            LocationServices.GeofencingApi.addGeofences(
+//                    googleApiClient,
+//                    getGeofencingRequest(),
+//                    getGeofencePendingIntent()
+//            ).setResultCallback(this);
+//        } catch (SecurityException securityException) {
+//            Log.e(TAG, securityException.getMessage());
+//        }
+//    }
+//
+//    public void unRegisterAllGeofences() {
+//        if (googleApiClient == null || !googleApiClient.isConnected()) {
+//            return;
+//        }
+//        try {
+//            LocationServices.GeofencingApi.removeGeofences(
+//                    googleApiClient,
+//                    // This is the same pending intent that was used in registerGeofences
+//                    getGeofencePendingIntent()
+//            ).setResultCallback(this);
+//        } catch (SecurityException securityException) {
+//            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
+//            Log.e(TAG, securityException.getMessage());
+//        }
+//    }
 
     public void updateGeofencesList(Cursor cursor) {
         List<String[]> placeIdAndRadius = getPlaceIdAndRadiusFromCursor(cursor);

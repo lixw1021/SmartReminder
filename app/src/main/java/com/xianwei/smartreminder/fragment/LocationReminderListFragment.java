@@ -42,9 +42,7 @@ import butterknife.ButterKnife;
  */
 
 public class LocationReminderListFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<Cursor>,
-        ConnectionCallbacks,
-        OnConnectionFailedListener {
+        implements LoaderManager.LoaderCallbacks<Cursor>{
 
     @BindView(R.id.reminder_list)
     RecyclerView reminderRecyclerView;
@@ -65,15 +63,6 @@ public class LocationReminderListFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLoaderManager().initLoader(TIME_LOADER_ID, null, this);
-
-        googleClient = new GoogleApiClient.Builder(getContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .addApi(Places.GEO_DATA_API)
-                .enableAutoManage(getActivity(), this)
-                .build();
-        geofencing = new Geofencing(getContext(), googleClient);
     }
 
     @Override
@@ -110,10 +99,6 @@ public class LocationReminderListFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor newCursor) {
         locationReminderAdapter.swapCursor(newCursor);
-
-        geofencing.updateGeofencesList(newCursor);
-        geofencing.registerAllGeofences();
-        Log.i("12345", "add and register geofence");
     }
 
     @Override
@@ -121,19 +106,5 @@ public class LocationReminderListFragment extends Fragment
         locationReminderAdapter.swapCursor(null);
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        geofencing.unRegisterAllGeofences();
-        geofencing.registerAllGeofences();
-    }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.i(TAG, "API Client Connection Suspended!");
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e(TAG, "API Client Connection Failed!");
-    }
 }

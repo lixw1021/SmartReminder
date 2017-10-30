@@ -29,6 +29,7 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.xianwei.smartreminder.EditActivity;
+import com.xianwei.smartreminder.NewGeofencing;
 import com.xianwei.smartreminder.R;
 import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
 
@@ -61,6 +62,7 @@ public class EditLocationFragment extends Fragment {
     private Bundle bundle;
     private int itemId;
     private GeoDataClient geoDataClient;
+    private NewGeofencing geofencing;
     private PlaceDetectionClient mPlaceDetectionClient;
 
     public EditLocationFragment() {
@@ -76,6 +78,7 @@ public class EditLocationFragment extends Fragment {
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         geoDataClient = Places.getGeoDataClient(getContext(), null);
+        geofencing = new NewGeofencing(getContext());
         bundle = this.getArguments();
         if (bundle != null) {
             itemId = bundle.getInt("itemId");
@@ -108,6 +111,7 @@ public class EditLocationFragment extends Fragment {
                     Place place = places.get(0);
                     locationPickerTv.setText(place.getName() + "\n" + place.getAddress());
                     places.release();
+                    Log.i("12345edit","task success:" + placeId);
                 } else {
                     Log.e(TAG, "Place not found.");
                 }
@@ -196,7 +200,12 @@ public class EditLocationFragment extends Fragment {
                 Uri uri = Uri.withAppendedPath(LocationEntry.CONTENT_URL, String.valueOf(itemId));
                 getContext().getContentResolver().update(uri, values, null, null);
             } else {
-                getContext().getContentResolver().insert(LocationEntry.CONTENT_URL, values);
+                Uri uri = getContext().getContentResolver().insert(LocationEntry.CONTENT_URL, values);
+                if (uri != null) {
+                    String insertedRowId = uri.getLastPathSegment();
+                    geofencing.buildGeofence(placeId, radius);
+//                    geofencing.registerGeofence(Integer.parseInt(insertedRowId));
+                }
             }
             getActivity().finish();
         }
