@@ -27,7 +27,10 @@ public class NotificationUtils {
     private static final String MILLISECONDS_KEY = "milliseconds";
     private static final String TASK_KEY = "task";
 
-    private static final int NOTIFICATION_SERVICE_ID = 1001;
+    //make sure it won't equal to time reminder notification id
+    public static final int LOCATION_NOTIFICATION_ID = -100;
+    private static final int NOTIFICATION_SERVICE_PENDING_INTENT_ID = 1001;
+    private static final int CONTENT_PENDING_INTENT_ID = 1001;
 
     public static void clearAllNotification(Context context, int NotificationId) {
         NotificationManager manger =
@@ -35,18 +38,34 @@ public class NotificationUtils {
         manger.cancel(NotificationId);
     }
 
-    public static void locationReminder(Context context) {
+    public static void locationReminder(Context context, Intent intent) {
+        String task = intent.getStringExtra("task");
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_location)
-                .setContentText("location task")
+                .setContentText(task)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setContentIntent(contentIntent(context, 10000))
+                .setContentIntent(contentIntent(context))
+                .addAction(locationTaskDone(context, intent))
                 .setAutoCancel(true);
 
         NotificationManager manager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        manager.notify(10000, notificationBuilder.build());
+        manager.notify(LOCATION_NOTIFICATION_ID, notificationBuilder.build());
+    }
+
+    private static Action locationTaskDone(Context context, Intent intent) {
+        int taskId = intent.getIntExtra(ID_KEY, 0);
+        Intent locationTaskDoneIntent = new Intent(context, ReminderIntentService.class);
+        locationTaskDoneIntent.setAction(ReminderTasks.ACTION_LOCATION_TASK_DONE);
+        locationTaskDoneIntent.putExtras(intent);
+        PendingIntent taskDonePendingIntent = PendingIntent.getService(
+                context,
+                taskId,
+                locationTaskDoneIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        return new Action(R.drawable.ic_location, "Task Finish", taskDonePendingIntent);
     }
 
     public static void timeReminder(Context context, Intent intent) {
@@ -56,7 +75,7 @@ public class NotificationUtils {
                 .setSmallIcon(R.drawable.ic_time)
                 .setContentText(task)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setContentIntent(contentIntent(context, taskId))
+                .setContentIntent(contentIntent(context))
                 .addAction(taskDone(context, intent))
                 .addAction(taskPostpone(context, intent))
                 .setAutoCancel(true);
@@ -67,11 +86,11 @@ public class NotificationUtils {
         manager.notify(taskId, notificationBuilder.build());
     }
 
-    private static PendingIntent contentIntent(Context context, int NotificationId) {
+    private static PendingIntent contentIntent(Context context) {
         Intent launchActivityIntent = new Intent(context, MainActivity.class);
         return PendingIntent.getActivity(
                 context,
-                NotificationId,
+                CONTENT_PENDING_INTENT_ID,
                 launchActivityIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
@@ -112,7 +131,7 @@ public class NotificationUtils {
         intent.putExtras(bundle);
         PendingIntent servicePendingIntent = PendingIntent.getService(
                 context,
-                NOTIFICATION_SERVICE_ID,
+                NOTIFICATION_SERVICE_PENDING_INTENT_ID,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager manger = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

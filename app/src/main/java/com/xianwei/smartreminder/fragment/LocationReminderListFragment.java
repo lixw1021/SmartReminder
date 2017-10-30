@@ -2,37 +2,20 @@ package com.xianwei.smartreminder.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Places;
-import com.xianwei.smartreminder.Geofencing;
 import com.xianwei.smartreminder.R;
 import com.xianwei.smartreminder.adapter.LocationReminderAdapter;
 import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,7 +25,7 @@ import butterknife.ButterKnife;
  */
 
 public class LocationReminderListFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<Cursor>{
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @BindView(R.id.reminder_list)
     RecyclerView reminderRecyclerView;
@@ -53,8 +36,6 @@ public class LocationReminderListFragment extends Fragment
     private static final int TIME_LOADER_ID = 101;
 
     private LocationReminderAdapter locationReminderAdapter;
-    private GoogleApiClient googleClient;
-    private Geofencing geofencing;
 
     public LocationReminderListFragment() {
     }

@@ -6,10 +6,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
+import com.xianwei.smartreminder.Geofencing;
+import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
 import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
 import com.xianwei.smartreminder.util.NotificationUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by xianwei li on 10/25/2017.
@@ -17,10 +21,11 @@ import com.xianwei.smartreminder.util.NotificationUtils;
 
 public class ReminderTasks {
 
-    public static final String ACTION_TIME_TASK_DONE = "task-done";
+    public static final String ACTION_TIME_TASK_DONE = "time-task-done";
     public static final String ACTION_TIME_TASK_POSTPONE = "task-postpone";
     public static final String ACTION_TIME_TASK_REMINDER = "time-reminder";
     public static final String ACTION_LOCATION_TASK_REMINDER = "location-reminder";
+    public static final String ACTION_LOCATION_TASK_DONE = "location-reminder-done";
     private static final String ID_KEY = "id";
     private static final String MILLISECONDS_KEY = "milliseconds";
     private static final String TASK_KEY = "task";
@@ -40,14 +45,38 @@ public class ReminderTasks {
             postponeTask(context, id, milliseconds);
 
         } else if (ACTION_TIME_TASK_REMINDER.equals(action)) {
-            Log.i("12345","time notification push");
             NotificationUtils.timeReminder(context, intent);
             long milliseconds = intent.getLongExtra(MILLISECONDS_KEY, 0);
             setupNextNotification(context, milliseconds);
 
         } else if (ACTION_LOCATION_TASK_REMINDER.equals(action)) {
-            Log.i("12345","location notification push");
-            NotificationUtils.locationReminder(context);
+            NotificationUtils.locationReminder(context, intent);
+        } else if (ACTION_LOCATION_TASK_DONE.equals(action)) {
+            int id = intent.getIntExtra(ID_KEY, -1);
+            updateLocationTask(context, id);
+        }
+    }
+
+    private static void updateLocationTask(Context context, int rowId) {
+        Geofencing geofence = new Geofencing(context);
+        Uri uri = Uri.withAppendedPath(LocationEntry.CONTENT_URL, String.valueOf(rowId));
+
+        ContentValues values = new ContentValues();
+        values.put(LocationEntry.COLUMN_NAME_TASK_DONE, DATABASE_TRUE);
+        context.getContentResolver().update(uri, values, null, null);
+        NotificationUtils.clearAllNotification(context, NotificationUtils.LOCATION_NOTIFICATION_ID);
+
+        String[] project = new String[]{
+                LocationEntry._ID,
+                LocationEntry.COLUMN_NAME_LOCATION_ID};
+        Cursor cursor = context.getContentResolver().query(uri, project, null, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToNext();
+            String placeId = cursor.getString(
+                    cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_ID));
+            List<String> placeIds = new ArrayList<>();
+            placeIds.add(placeId);
+            geofence.unRegisterGeofence(placeIds);
         }
     }
 

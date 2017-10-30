@@ -29,9 +29,12 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.xianwei.smartreminder.EditActivity;
-import com.xianwei.smartreminder.NewGeofencing;
+import com.xianwei.smartreminder.Geofencing;
 import com.xianwei.smartreminder.R;
 import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,7 +65,7 @@ public class EditLocationFragment extends Fragment {
     private Bundle bundle;
     private int itemId;
     private GeoDataClient geoDataClient;
-    private NewGeofencing geofencing;
+    private Geofencing geofencing;
     private PlaceDetectionClient mPlaceDetectionClient;
 
     public EditLocationFragment() {
@@ -78,7 +81,7 @@ public class EditLocationFragment extends Fragment {
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         geoDataClient = Places.getGeoDataClient(getContext(), null);
-        geofencing = new NewGeofencing(getContext());
+        geofencing = new Geofencing(getContext());
         bundle = this.getArguments();
         if (bundle != null) {
             itemId = bundle.getInt("itemId");
@@ -105,13 +108,13 @@ public class EditLocationFragment extends Fragment {
         reminderRadiusEt.setText(String.valueOf(radius));
         geoDataClient.getPlaceById(placeId).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
             @Override
-            public void onComplete( Task<PlaceBufferResponse> task) {
+            public void onComplete(Task<PlaceBufferResponse> task) {
                 if (task.isSuccessful()) {
                     PlaceBufferResponse places = task.getResult();
                     Place place = places.get(0);
                     locationPickerTv.setText(place.getName() + "\n" + place.getAddress());
                     places.release();
-                    Log.i("12345edit","task success:" + placeId);
+                    Log.i("12345edit", "task success:" + placeId);
                 } else {
                     Log.e(TAG, "Place not found.");
                 }
@@ -185,11 +188,11 @@ public class EditLocationFragment extends Fragment {
             toast("Please add a place name");
         } else if (TextUtils.isEmpty(placeId)) {
             toast("Please pick a place");
-        } else if (TextUtils.isEmpty(stringRadius)){
+        } else if (TextUtils.isEmpty(stringRadius)) {
             toast("Please enter a radius");
-        } else if (Integer.parseInt(stringRadius) < 20 || Integer.parseInt(stringRadius) > 10000 ) {
+        } else if (Integer.parseInt(stringRadius) < 20 || Integer.parseInt(stringRadius) > 10000) {
             toast("Please enter a valid radius");
-        }else {
+        } else {
             int radius = Integer.parseInt(stringRadius);
             ContentValues values = new ContentValues();
             values.put(LocationEntry.COLUMN_NAME_TASK, task);
@@ -199,16 +202,23 @@ public class EditLocationFragment extends Fragment {
             if (itemId > 0) {
                 Uri uri = Uri.withAppendedPath(LocationEntry.CONTENT_URL, String.valueOf(itemId));
                 getContext().getContentResolver().update(uri, values, null, null);
+                updateGeofence(placeId, itemId);
             } else {
                 Uri uri = getContext().getContentResolver().insert(LocationEntry.CONTENT_URL, values);
                 if (uri != null) {
                     String insertedRowId = uri.getLastPathSegment();
-                    geofencing.buildGeofence(placeId, radius);
-//                    geofencing.registerGeofence(Integer.parseInt(insertedRowId));
+                    geofencing.buildGeofence(Integer.parseInt(insertedRowId));
                 }
             }
             getActivity().finish();
         }
+    }
+
+    private void updateGeofence(String placeId, int itemId) {
+        List<String> unregisterPlaceIds = new ArrayList<>();
+        unregisterPlaceIds.add(placeId);
+        geofencing.unRegisterGeofence(unregisterPlaceIds);
+        geofencing.buildGeofence(itemId);
     }
 
     @OnClick(R.id.ib_delete)

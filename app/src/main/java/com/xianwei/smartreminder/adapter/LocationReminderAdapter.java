@@ -15,9 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xianwei.smartreminder.EditActivity;
+import com.xianwei.smartreminder.Geofencing;
 import com.xianwei.smartreminder.R;
-import com.xianwei.smartreminder.data.ReminderContract;
 import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +57,8 @@ public class LocationReminderAdapter extends RecyclerView.Adapter<LocationRemind
                 cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_NAME));
         int taskDone = cursor.getInt(
                 cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_TASK_DONE));
+        final String placeId = cursor.getString(
+                cursor.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME_LOCATION_ID));
 
         holder.checkBox.setChecked(taskDone == DATABASE_TRUE);
         holder.itemId = id;
@@ -66,6 +71,7 @@ public class LocationReminderAdapter extends RecyclerView.Adapter<LocationRemind
                 if (holder.checkBox.isChecked()) {
                     Uri itemUri = ContentUris.withAppendedId(LocationEntry.CONTENT_URL, id );
                     updateItem(itemUri);
+                    unregisterGeofence(placeId);
                     Toast.makeText(context, "Task finished", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -76,6 +82,13 @@ public class LocationReminderAdapter extends RecyclerView.Adapter<LocationRemind
         ContentValues values = new ContentValues();
         values.put(LocationEntry.COLUMN_NAME_TASK_DONE, DATABASE_TRUE);
         context.getContentResolver().update(itemUri, values, null, null );
+    }
+
+    private void unregisterGeofence(String placeId) {
+        List<String> placeIds = new ArrayList<>();
+        placeIds.add(placeId);
+        Geofencing geofence = new Geofencing(context);
+        geofence.unRegisterGeofence(placeIds);
     }
 
     @Override
