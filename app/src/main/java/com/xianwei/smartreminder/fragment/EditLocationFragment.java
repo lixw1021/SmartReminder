@@ -1,11 +1,15 @@
 package com.xianwei.smartreminder.fragment;
 
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -48,6 +52,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class EditLocationFragment extends Fragment {
 
+    private static final int FINE_LOCATION_PERMISSION_REQUEST = 100;
     @BindView(R.id.et_location_task)
     EditText locationTaskEt;
     @BindView(R.id.et_location_name)
@@ -192,6 +197,12 @@ public class EditLocationFragment extends Fragment {
             toast("Please enter a radius");
         } else if (Integer.parseInt(stringRadius) < 20 || Integer.parseInt(stringRadius) > 10000) {
             toast("Please enter a valid radius");
+        } else if (ActivityCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(
+                    getActivity(),
+                    new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+                    FINE_LOCATION_PERMISSION_REQUEST);
         } else {
             int radius = Integer.parseInt(stringRadius);
             ContentValues values = new ContentValues();
@@ -230,5 +241,10 @@ public class EditLocationFragment extends Fragment {
 
     public void toast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }
