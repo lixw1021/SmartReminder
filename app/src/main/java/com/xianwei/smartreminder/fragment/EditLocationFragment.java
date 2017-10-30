@@ -89,8 +89,14 @@ public class EditLocationFragment extends Fragment {
         geofencing = new Geofencing(getContext());
         bundle = this.getArguments();
         if (bundle != null) {
-            itemId = bundle.getInt("itemId");
-            setupItemInfo(itemId);
+            itemId = bundle.getInt("itemId", -1);
+            String task = bundle.getString("voiceInput");
+            if (itemId > -1) {
+                setupItemInfo(itemId);
+            }
+            if (task != null){
+                locationTaskEt.setText(task);
+            }
         }
         return view;
     }

@@ -82,8 +82,14 @@ public class EditTimeFragment extends Fragment {
         setHasOptionsMenu(true);
         bundle = this.getArguments();
         if (bundle != null) {
-            itemId = bundle.getInt("itemId");
-            setupItemInfo(itemId);
+            itemId = bundle.getInt("itemId", -1);
+            String task = bundle.getString("voiceInput");
+            if (itemId > -1) {
+                setupItemInfo(itemId);
+            }
+            if (task != null) {
+                taskEt.setText(task);
+            }
         }
         return view;
     }

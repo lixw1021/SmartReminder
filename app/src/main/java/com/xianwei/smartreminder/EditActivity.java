@@ -43,12 +43,28 @@ public class EditActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.hasExtra("pageId") && savedInstanceState == null) {
             toolbar.setTitle("New Task");
-            setupFragment(intent);
+            if (intent.hasExtra("voiceInput")) {
+                setupVoiceInputFragment(intent);
+            } else {
+                setupFragment(intent);
+            }
         } else if (intent.hasExtra("editFragment") && savedInstanceState == null) {
             toolbar.setTitle("Edit Task");
             setupEditFragment(intent);
         }
         setSupportActionBar(toolbar);
+    }
+
+    private void setupVoiceInputFragment(Intent intent) {
+        int pageId = intent.getIntExtra("pageId", 0);
+        Bundle bundle = intent.getExtras();
+
+        fragment = (pageId == 0) ? new EditTimeFragment() : new EditLocationFragment();
+        fragment.setArguments(bundle);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.edit_fragment_container, fragment)
+                .commit();
     }
 
     private void setupFragment(Intent intent) {
