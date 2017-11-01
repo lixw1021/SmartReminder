@@ -5,12 +5,9 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,6 +22,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.xianwei.TimeRecognition;
 import com.xianwei.smartreminder.R;
 import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
 import com.xianwei.smartreminder.module.DateAndTime;
@@ -89,6 +87,29 @@ public class EditTimeFragment extends Fragment {
             }
             if (task != null) {
                 taskEt.setText(task);
+                TimeRecognition timeRecognition = new TimeRecognition(task);
+                pickedYear = timeRecognition.getPickedYear();
+                pickedMonth = timeRecognition.getPickedMonth();
+                pickedDay = timeRecognition.getPickedDay();
+                pickedHour = timeRecognition.getPickedHour();
+                pickedMinute = timeRecognition.getPickedMinute();
+                hasTime = timeRecognition.hasTime() ? 1 : 0;
+                if (timeRecognition.hasDate()) {
+                    datePickTv.setText(TimeUtil.dateDisplay(pickedYear, pickedMonth, pickedDay));
+                }
+                if (timeRecognition.hasTime()) {
+                    timePickTv.setText(TimeUtil.timeDisplay(pickedHour, pickedMinute));
+                    timePickTv.setVisibility(View.VISIBLE);
+                }
+
+                Log.i("12345pickedYear",  " " + pickedYear);
+                Log.i("12345pickedMonth", " " + pickedMonth);
+                Log.i("12345pickedDay",  " " +pickedDay);
+                Log.i("12345pickedHour", " " + pickedHour);
+                Log.i("12345pickedMinute",  " " +pickedMinute);
+                Log.i("12345targetMillisecond", " " + timeRecognition.getTargetMillisecond());
+                Log.i("12345hastime", String.valueOf(timeRecognition.hasTime()));
+                Log.i("12345hasdate", String.valueOf(timeRecognition.hasDate()));
             }
         }
         return view;
@@ -257,11 +278,11 @@ public class EditTimeFragment extends Fragment {
         if (!TextUtils.isEmpty(task)) {
             ContentValues values = addContentValues(task);
 
-             if (itemId > 0) {
-                 Uri uri = Uri.withAppendedPath(TimeEntry.CONTENT_URL, String.valueOf(itemId));
-                 getContext().getContentResolver().update(uri, values, null, null);
+            if (itemId > 0) {
+                Uri uri = Uri.withAppendedPath(TimeEntry.CONTENT_URL, String.valueOf(itemId));
+                getContext().getContentResolver().update(uri, values, null, null);
             } else {
-                 getContext().getContentResolver().insert(TimeEntry.CONTENT_URL, values);
+                getContext().getContentResolver().insert(TimeEntry.CONTENT_URL, values);
             }
             getActivity().finish();
             showToast("Reminder Saved");
@@ -279,6 +300,11 @@ public class EditTimeFragment extends Fragment {
         values.put(TimeEntry.COLUMN_NAME_MILLISECOND, timeInMilliseconds);
         values.put(TimeEntry.COLUMN_NAME_HAS_TIME, hasTime);
         values.put(TimeEntry.COLUMN_NAME_TASK_DONE, DATABASE_FALSE);
+        Log.i("12345savedYear",  " " + pickedYear);
+        Log.i("12345savedMonth", " " + pickedMonth);
+        Log.i("12345savedDay",  " " +pickedDay);
+        Log.i("12345savedHour", " " + pickedHour);
+        Log.i("12345savedMinute",  " " +pickedMinute);
 
         return values;
     }
