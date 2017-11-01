@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_place_api_key" />
@@ -36,6 +35,8 @@
             android:name=".service.ReminderIntentService"
             android:enabled="true"
             android:exported="false" />
+
+        <activity android:name=".NavigationActivity"></activity>
     </application>
 
 </manifest>

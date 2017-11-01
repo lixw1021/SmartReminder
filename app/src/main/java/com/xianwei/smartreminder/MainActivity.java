@@ -19,9 +19,6 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.xianwei.smartreminder.adapter.ReminderPagerAdapter;
-import com.xianwei.smartreminder.fragment.EditLocationFragment;
-import com.xianwei.smartreminder.fragment.EditTimeFragment;
-import com.xianwei.smartreminder.util.NotificationUtils;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -146,22 +143,40 @@ public class MainActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                String fragmentName;
                 switch (item.getItemId()) {
                     case R.id.menu_done:
+                        launchFragment("taskDone");
                         break;
                     case R.id.menu_settings:
+                        launchFragment("setting");
                         break;
                     case R.id.menu_remove_ads:
+                        launchFragment("removeAd");
                         break;
                     case R.id.menu_feedback:
+                        launchFragment("feedback");
                         break;
                     case R.id.menu_about:
+                        launchFragment("about");
                         break;
                     default:
                         break;
                 }
-                return true;
+
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                }
+
+                drawerLayout.closeDrawer(Gravity.LEFT);
+                return false;
             }
         });
+    }
+
+    private void launchFragment(String fragmentName) {
+        Intent intent = new Intent(this, NavigationActivity.class);
+        intent.putExtra("fragmentName", fragmentName);
+        startActivity(intent);
     }
 }

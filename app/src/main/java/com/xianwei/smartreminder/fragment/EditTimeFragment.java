@@ -96,10 +96,13 @@ public class EditTimeFragment extends Fragment {
                 hasTime = timeRecognition.hasTime() ? 1 : 0;
                 if (timeRecognition.hasDate()) {
                     datePickTv.setText(TimeUtil.dateDisplay(pickedYear, pickedMonth, pickedDay));
+                    dateClearBtn.setVisibility(View.VISIBLE);
                 }
                 if (timeRecognition.hasTime()) {
                     timePickTv.setText(TimeUtil.timeDisplay(pickedHour, pickedMinute));
                     timePickTv.setVisibility(View.VISIBLE);
+                    dateClearBtn.setVisibility(View.VISIBLE);
+                    timeCleanBtn.setVisibility(View.VISIBLE);
                 }
 
                 Log.i("12345pickedYear",  " " + pickedYear);
