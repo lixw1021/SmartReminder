@@ -21,6 +21,10 @@ import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
 public class ReminderProvider extends ContentProvider {
 
     public static final String LOG_TAG = ReminderProvider.class.getSimpleName();
+    private static final String QUERY_NOT_SUPPORT = "query is not support for :";
+    private static final String INSERT_NOT_SUPPORT = "insert is not support for :";
+    private static final String DELETE_NOT_SUPPORT = "delete is not support for :";
+    private static final String UPDATE_NOT_SUPPORT = "update is not support for :";
     private static final int TIME_REMINDER = 100;
     private static final int TIME_REMINDER_ID = 101;
     private static final int LOCATION_REMINDER = 102;
@@ -73,7 +77,7 @@ public class ReminderProvider extends ContentProvider {
                         null, null, sortOrder);
                 break;
             default:
-                throw new IllegalArgumentException("query is not support for :" + uri);
+                throw new IllegalArgumentException(QUERY_NOT_SUPPORT + uri);
         }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
@@ -88,7 +92,7 @@ public class ReminderProvider extends ContentProvider {
             case LOCATION_REMINDER:
                 return insertReminder(uri, values, LocationEntry.TABLE_NAME);
             default:
-                throw new IllegalArgumentException("Insertion is not supported for :" + uri);
+                throw new IllegalArgumentException(INSERT_NOT_SUPPORT + uri);
         }
     }
 
@@ -125,7 +129,7 @@ public class ReminderProvider extends ContentProvider {
                 rowDeleted = db.delete(LocationEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException("delete is not supported for :" + uri);
+                throw new IllegalArgumentException(DELETE_NOT_SUPPORT + uri);
         }
         if (rowDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -146,7 +150,7 @@ public class ReminderProvider extends ContentProvider {
                 selectionArgs = new String[] {uri.getLastPathSegment()};
                 return updateLocationReminder(uri, values, selection, selectionArgs);
             default:
-                throw new IllegalArgumentException("update is not support for :" + uri);
+                throw new IllegalArgumentException(UPDATE_NOT_SUPPORT + uri);
         }
     }
 
@@ -154,7 +158,7 @@ public class ReminderProvider extends ContentProvider {
         if (values.containsKey(TimeEntry.COLUMN_NAME_TASK)) {
             String task = values.getAsString(TimeEntry.COLUMN_NAME_TASK);
             if (task == null) {
-                throw new IllegalArgumentException("update is not supported for :" +uri);
+                throw new IllegalArgumentException(UPDATE_NOT_SUPPORT +uri);
             }
         }
         SQLiteDatabase db = reminderDbHelper.getWritableDatabase();
@@ -169,17 +173,17 @@ public class ReminderProvider extends ContentProvider {
         if (values.containsKey(LocationEntry.COLUMN_NAME_TASK)) {
             String task = values.getAsString(LocationEntry.COLUMN_NAME_TASK);
             if (TextUtils.isEmpty(task)) {
-                throw new IllegalArgumentException("update is not supported for :" +uri);
+                throw new IllegalArgumentException(UPDATE_NOT_SUPPORT +uri);
             }
         }  else if (values.containsKey(LocationEntry.COLUMN_NAME_LOCATION_NAME)) {
             String locationName = values.getAsString(LocationEntry.COLUMN_NAME_LOCATION_NAME);
             if (TextUtils.isEmpty(locationName)) {
-                throw new IllegalArgumentException("update is not supported for :" +uri);
+                throw new IllegalArgumentException(UPDATE_NOT_SUPPORT +uri);
             }
         } else if (values.containsKey(LocationEntry.COLUMN_NAME_LOCATION_ID)) {
             String locationId = values.getAsString(LocationEntry.COLUMN_NAME_LOCATION_ID);
             if (TextUtils.isEmpty(locationId)) {
-                throw new IllegalArgumentException("update is not supported for :" +uri);
+                throw new IllegalArgumentException(UPDATE_NOT_SUPPORT +uri);
             }
         }
         SQLiteDatabase db = reminderDbHelper.getWritableDatabase();

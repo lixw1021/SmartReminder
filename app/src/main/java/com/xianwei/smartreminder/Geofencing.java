@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
 import com.xianwei.smartreminder.service.ReminderIntentService;
 import com.xianwei.smartreminder.service.ReminderTasks;
+import com.xianwei.smartreminder.util.NotificationUtils;
 
 import java.util.List;
 
@@ -80,14 +81,10 @@ public class Geofencing {
                                 PlaceBufferResponse places = task.getResult();
                                 Place place = places.get(0);
                                 geofence = createGeofence(place, radius);
-                                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                    // TODO: Consider calling
-                                    //    ActivityCompat#requestPermissions
-                                    // here to request the missing permissions, and then overriding
-                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                    //                                          int[] grantResults)
-                                    // to handle the case where the user grants the permission. See the documentation
-                                    // for ActivityCompat#requestPermissions for more details.
+                                if (ActivityCompat.checkSelfPermission(
+                                        context, Manifest.permission.ACCESS_FINE_LOCATION)
+                                        != PackageManager.PERMISSION_GRANTED) {
+                                    // permission has been granted before using geofence
                                     return;
                                 }
                                 geofencingClient.addGeofences(
@@ -127,8 +124,8 @@ public class Geofencing {
     private PendingIntent getGeofencePendingIntent(int rowId, String task) {
         Intent intent = new Intent(context, ReminderIntentService.class);
         intent.setAction(ReminderTasks.ACTION_LOCATION_TASK_REMINDER);
-        intent.putExtra("id", rowId);
-        intent.putExtra("task", task);
+        intent.putExtra(NotificationUtils.EXTRA_TASK_ID, rowId);
+        intent.putExtra(NotificationUtils.EXTRA_TASK_TITLE, task);
         geofencePendingIntent = PendingIntent.getService(
                 context,
                 rowId,

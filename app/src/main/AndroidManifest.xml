@@ -36,7 +36,7 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".NavigationActivity"></activity>
+        <activity android:name=".NaviActivity"></activity>
     </application>
 
 </manifest>

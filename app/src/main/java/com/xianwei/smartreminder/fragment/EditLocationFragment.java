@@ -27,7 +27,6 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBufferResponse;
-import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,7 +51,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class EditLocationFragment extends Fragment {
 
-    private static final int FINE_LOCATION_PERMISSION_REQUEST = 100;
+    private static final int FINE_LOCATION_PERMISSION_REQUEST = 10000;
     @BindView(R.id.et_location_task)
     EditText locationTaskEt;
     @BindView(R.id.et_location_name)
@@ -71,7 +70,6 @@ public class EditLocationFragment extends Fragment {
     private int itemId;
     private GeoDataClient geoDataClient;
     private Geofencing geofencing;
-    private PlaceDetectionClient mPlaceDetectionClient;
 
     public EditLocationFragment() {
         // Required empty public constructor
@@ -89,12 +87,12 @@ public class EditLocationFragment extends Fragment {
         geofencing = new Geofencing(getContext());
         bundle = this.getArguments();
         if (bundle != null) {
-            itemId = bundle.getInt("itemId", -1);
-            String task = bundle.getString("voiceInput");
+            itemId = bundle.getInt(EditActivity.EXTRA_ITEM_ID, -1);
+            String task = bundle.getString(EditActivity.EXTRA_VOICE_INPUT);
             if (itemId > -1) {
                 setupItemInfo(itemId);
             }
-            if (task != null){
+            if (task != null) {
                 locationTaskEt.setText(task);
             }
         }
@@ -125,7 +123,6 @@ public class EditLocationFragment extends Fragment {
                     Place place = places.get(0);
                     locationPickerTv.setText(place.getName() + "\n" + place.getAddress());
                     places.release();
-                    Log.i("12345edit", "task success:" + placeId);
                 } else {
                     Log.e(TAG, "Place not found.");
                 }
@@ -165,7 +162,9 @@ public class EditLocationFragment extends Fragment {
         if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
             Place place = PlacePicker.getPlace(getContext(), data);
             if (place == null) {
-                Toast.makeText(getContext(), "No place picked", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),
+                        R.string.toast_no_place_picked,
+                        Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -194,20 +193,20 @@ public class EditLocationFragment extends Fragment {
         String locationName = locationNameEt.getText().toString().trim();
         String stringRadius = reminderRadiusEt.getText().toString().trim();
         if (TextUtils.isEmpty(task)) {
-            toast("Please add a task");
+            toast(getString(R.string.toast_please_add_a_task));
         } else if (TextUtils.isEmpty(locationName)) {
-            toast("Please add a place name");
+            toast(getString(R.string.toast_pleas_add_place_name));
         } else if (TextUtils.isEmpty(placeId)) {
-            toast("Please pick a place");
+            toast(getString(R.string.toast_please_pick_a_place));
         } else if (TextUtils.isEmpty(stringRadius)) {
-            toast("Please enter a radius");
+            toast(getString(R.string.toast_please_enter_radius));
         } else if (Integer.parseInt(stringRadius) < 20 || Integer.parseInt(stringRadius) > 10000) {
-            toast("Please enter a valid radius");
+            toast(getString(R.string.toast_please_enter_a_valid_radius));
         } else if (ActivityCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     getActivity(),
-                    new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     FINE_LOCATION_PERMISSION_REQUEST);
         } else {
             int radius = Integer.parseInt(stringRadius);
@@ -221,7 +220,8 @@ public class EditLocationFragment extends Fragment {
                 getContext().getContentResolver().update(uri, values, null, null);
                 updateGeofence(placeId, itemId);
             } else {
-                Uri uri = getContext().getContentResolver().insert(LocationEntry.CONTENT_URL, values);
+                Uri uri =
+                        getContext().getContentResolver().insert(LocationEntry.CONTENT_URL, values);
                 if (uri != null) {
                     String insertedRowId = uri.getLastPathSegment();
                     geofencing.buildGeofence(Integer.parseInt(insertedRowId));
@@ -250,7 +250,9 @@ public class EditLocationFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

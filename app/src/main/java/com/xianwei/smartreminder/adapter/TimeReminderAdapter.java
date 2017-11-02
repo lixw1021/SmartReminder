@@ -5,11 +5,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,18 +48,19 @@ public class TimeReminderAdapter extends RecyclerView.Adapter<TimeReminderAdapte
     public void onBindViewHolder(final ViewHolder holder, int position) {
         if (cursor == null || cursor.getCount() == 0) return;
         cursor.moveToPosition(position);
-        final int id = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry._ID));
-        String task = cursor.getString(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK));
-        long millisecond = cursor.getLong(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_MILLISECOND));
-        int hasTime = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_HAS_TIME));
-        int taskDone = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK_DONE));
+        final int id = cursor.getInt(cursor.getColumnIndex(TimeEntry._ID));
+        String task = cursor.getString(cursor.getColumnIndex(TimeEntry.COLUMN_NAME_TASK));
+        long millisecond = cursor.getLong(cursor.getColumnIndex(TimeEntry.COLUMN_NAME_MILLISECOND));
+        int hasTime = cursor.getInt(cursor.getColumnIndex(TimeEntry.COLUMN_NAME_HAS_TIME));
+        int taskDone = cursor.getInt(cursor.getColumnIndex(TimeEntry.COLUMN_NAME_TASK_DONE));
 
         if (millisecond > 0) {
             DateAndTime dateAndTime = TimeUtil.millisecondToDateAndTime(millisecond);
             holder.date.setText(TimeUtil.dateDisplay(
                     dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDay()));
             if (hasTime == DATABASE_TRUE) {
-                holder.time.setText(TimeUtil.timeDisplay(dateAndTime.getHour(), dateAndTime.getMinute()));
+                holder.time.setText(TimeUtil.timeDisplay(
+                        dateAndTime.getHour(), dateAndTime.getMinute()));
             } else {
                 holder.time.setText(null);
             }
@@ -81,11 +79,15 @@ public class TimeReminderAdapter extends RecyclerView.Adapter<TimeReminderAdapte
                 if (holder.checkBox.isChecked()) {
                     Uri itemUri = ContentUris.withAppendedId(TimeEntry.CONTENT_URL, id);
                     updateItem(itemUri, DATABASE_TRUE);
-                    Toast.makeText(context, "Task finished", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,
+                            context.getString(R.string.toast_task_finished),
+                            Toast.LENGTH_SHORT).show();
                 } else if (!holder.checkBox.isChecked()) {
                     Uri itemUri = ContentUris.withAppendedId(TimeEntry.CONTENT_URL, id);
                     updateItem(itemUri, DATABASE_FALSE);
-                    Toast.makeText(context, "Task forward to undo", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,
+                            context.getString(R.string.toast_task_forward_to_undo),
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -94,7 +96,7 @@ public class TimeReminderAdapter extends RecyclerView.Adapter<TimeReminderAdapte
     private void updateItem(Uri itemUri, int taskDone) {
         ContentValues values = new ContentValues();
         values.put(TimeEntry.COLUMN_NAME_TASK_DONE, taskDone);
-        context.getContentResolver().update(itemUri, values, null, null );
+        context.getContentResolver().update(itemUri, values, null, null);
     }
 
     @Override
@@ -121,16 +123,19 @@ public class TimeReminderAdapter extends RecyclerView.Adapter<TimeReminderAdapte
         @BindView(R.id.checkbox_time_reminder)
         CheckBox checkBox;
         int itemId;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
+            this.setIsRecyclable(false);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, EditActivity.class);
-                    intent.putExtra("itemId", itemId);
-                    intent.putExtra("editFragment", "timeEdit");
+                    intent.putExtra(EditActivity.EXTRA_ITEM_ID, itemId);
+                    intent.putExtra(
+                            EditActivity.EXTRA_EDIT_FRAGMENT,
+                            EditActivity.EXTRA_EDIT_FRAGMENT);
                     context.startActivity(intent);
                 }
             });

@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupToolbar() {
-        toolbar.setTitle("Smart Reminder");
+        toolbar.setTitle(getString(R.string.toolbar_title_smart_reminder));
         toolbar.setNavigationIcon(R.drawable.ic_dehaze);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.fab_add)
     void addReminder() {
         Intent intent = new Intent(MainActivity.this, EditActivity.class);
-        intent.putExtra("pageId", viewPager.getCurrentItem());
+        intent.putExtra(EditActivity.EXTRA_PAGE_ID, viewPager.getCurrentItem());
         startActivity(intent);
     }
 
@@ -133,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchEditFragment(String viceInput) {
         Intent intent = new Intent(this, EditActivity.class);
-        intent.putExtra("voiceInput", viceInput);
-        intent.putExtra("pageId", viewPager.getCurrentItem());
+        intent.putExtra(EditActivity.EXTRA_VOICE_INPUT, viceInput);
+        intent.putExtra(EditActivity.EXTRA_PAGE_ID, viewPager.getCurrentItem());
         startActivity(intent);
     }
 
@@ -143,22 +143,21 @@ public class MainActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                String fragmentName;
                 switch (item.getItemId()) {
                     case R.id.menu_done:
-                        launchFragment("taskDone");
+                        launchFragment(NaviActivity.EXTRA_TASK_DONE);
                         break;
                     case R.id.menu_settings:
-                        launchFragment("setting");
+                        launchFragment(NaviActivity.EXTRA_SETTING);
                         break;
                     case R.id.menu_remove_ads:
-                        launchFragment("removeAd");
+                        launchFragment(NaviActivity.EXTRA_REMOVE_AD);
                         break;
                     case R.id.menu_feedback:
-                        launchFragment("feedback");
+                        launchFragment(NaviActivity.EXTRA_FEEDBACK);
                         break;
                     case R.id.menu_about:
-                        launchFragment("about");
+                        launchFragment(NaviActivity.EXTRA_ABOUT);
                         break;
                     default:
                         break;
@@ -175,8 +174,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchFragment(String fragmentName) {
-        Intent intent = new Intent(this, NavigationActivity.class);
-        intent.putExtra("fragmentName", fragmentName);
+        Intent intent = new Intent(this, NaviActivity.class);
+        intent.putExtra(NaviActivity.EXTRA_FRAGMENT_NAME, fragmentName);
         startActivity(intent);
     }
 }

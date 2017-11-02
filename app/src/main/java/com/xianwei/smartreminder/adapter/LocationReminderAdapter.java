@@ -29,7 +29,8 @@ import butterknife.ButterKnife;
  * Created by xianwei li on 10/26/2017.
  */
 
-public class LocationReminderAdapter extends RecyclerView.Adapter<LocationReminderAdapter.ViewHolder> {
+public class LocationReminderAdapter extends
+        RecyclerView.Adapter<LocationReminderAdapter.ViewHolder> {
     private static int DATABASE_FALSE = 0;
     private static int DATABASE_TRUE = 1;
     private Context context;
@@ -41,7 +42,9 @@ public class LocationReminderAdapter extends RecyclerView.Adapter<LocationRemind
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_location_reminder, parent, false);
+        View view = LayoutInflater
+                .from(context)
+                .inflate(R.layout.item_location_reminder, parent, false);
         return new ViewHolder(view);
     }
 
@@ -71,21 +74,25 @@ public class LocationReminderAdapter extends RecyclerView.Adapter<LocationRemind
                 if (holder.checkBox.isChecked()) {
                     updateItem(id, DATABASE_TRUE);
                     unregisterGeofence(placeId);
-                    Toast.makeText(context, "Task finished", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,
+                            context.getString(R.string.toast_task_finished),
+                            Toast.LENGTH_SHORT).show();
                 } else if (!holder.checkBox.isChecked()) {
                     updateItem(id, DATABASE_FALSE);
                     registerGeofence(id);
-                    Toast.makeText(context, "Task forward to undo", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,
+                            context.getString(R.string.toast_task_forward_to_undo),
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     private void updateItem(int id, int hasDone) {
-        Uri itemUri = ContentUris.withAppendedId(LocationEntry.CONTENT_URL, id );
+        Uri itemUri = ContentUris.withAppendedId(LocationEntry.CONTENT_URL, id);
         ContentValues values = new ContentValues();
         values.put(LocationEntry.COLUMN_NAME_TASK_DONE, hasDone);
-        context.getContentResolver().update(itemUri, values, null, null );
+        context.getContentResolver().update(itemUri, values, null, null);
     }
 
     private void unregisterGeofence(String placeId) {
@@ -121,16 +128,19 @@ public class LocationReminderAdapter extends RecyclerView.Adapter<LocationRemind
         @BindView(R.id.checkbox_location_reminder)
         CheckBox checkBox;
         int itemId;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
+            this.setIsRecyclable(false);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, EditActivity.class);
-                    intent.putExtra("itemId", itemId);
-                    intent.putExtra("editFragment", "locationEdit");
+                    intent.putExtra(EditActivity.EXTRA_ITEM_ID, itemId);
+                    intent.putExtra(
+                            EditActivity.EXTRA_EDIT_FRAGMENT,
+                            EditActivity.EXTRA_LOCATION_EDIT);
                     context.startActivity(intent);
                 }
             });

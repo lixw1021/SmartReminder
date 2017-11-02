@@ -1,8 +1,47 @@
 <resources>
     <string name="app_name">Smart Reminder</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="speech_prompt">Say something&#8230;</string>
     <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
+
+    <string name="task">Task :</string>
+    <string name="enter_to_do_here">Enter TO_DO Here</string>
+    <string name="location_name">Location Name :</string>
+    <string name="enter_location_name">Enter location name</string>
+    <string name="reminder_radius_m">Reminder radius ( m ) :</string>
+    <string name="enter_radius_20_10000">Enter radius : 20 ~ 10000</string>
+    <string name="pick_reminder_location">Pick reminder location</string>
+    <string name="set_reminder_data">Set reminder Data</string>
+    <string name="set_reminder_time">Set reminder Time</string>
+    <string name="finished_time_reminder">Finished Time Reminder</string>
+    <string name="finished_location_reminder">Finished Location Reminder</string>
+
+    <string name="men_done">Finished Tasks</string>
+    <string name="men_settings">Setting</string>
+    <string name="menu_remove_ads">Remove Ad</string>
+    <string name="menu_feedback">Feedback</string>
+    <string name="men_about">About</string>
+    <string name="menu_delete_all_time_reminder">Delete all time Reminder</string>
+    <string name="menu_delete_all_location_reminder">Delete all location Reminder</string>
+    <string name="menu_save">save</string>
+
+    <string name="toolbar_title_new_task">New Task</string>
+    <string name="toolbar_title_edit_task">Edit Task</string>
+    <string name="toolbar_title_smart_reminder">Smart Reminder</string>
+
+    <string name="notification_task_finish">Task Finish</string>
+    <string name="notification_postphone_15_min">PostPone 15 min</string>
+
+    <string name="toast_task_finished">Task finished</string>
+    <string name="toast_task_forward_to_undo">Task forward to undo</string>
+    <string name="toast_reminder_saved">Reminder Saved</string>
+    <string name="toast_please_add_a_task">Please add a task</string>
+    <string name="toast_reminder_delete">Reminder deleted</string>
+    <string name="toast_no_place_picked">No place picked</string>
+    <string name="toast_pleas_add_place_name">Please add a place name</string>
+    <string name="toast_please_pick_a_place">Please pick a place</string>
+    <string name="toast_please_enter_radius">Please enter a radius</string>
+    <string name="toast_please_enter_a_valid_radius">Please enter a valid radius</string>
+
 </resources>

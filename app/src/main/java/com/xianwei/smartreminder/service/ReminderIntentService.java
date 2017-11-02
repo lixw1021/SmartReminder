@@ -10,8 +10,10 @@ import android.support.annotation.Nullable;
 
 public class ReminderIntentService extends IntentService {
 
+    private static final String NAME = "ReminderIntentService";
+
     public ReminderIntentService() {
-        super("ReminderIntentService");
+        super(NAME);
     }
 
     @Override

@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_horizontal"
         android:layout_marginTop="16dp"
-        android:text="Task :"
+        android:text="@string/task"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/item_subtitle_size" />
 
@@ -20,7 +20,7 @@
         android:layout_below="@id/tv_task"
         android:layout_marginEnd="@dimen/margin_horizontal"
         android:layout_marginStart="@dimen/margin_horizontal"
-        android:hint="Enter TO_DO Here"
+        android:hint="@string/enter_to_do_here"
         android:textSize="@dimen/item_subtitle_size" />
 
     <LinearLayout
@@ -41,7 +41,7 @@
             android:drawablePadding="16dp"
             android:drawableStart="@drawable/ic_date"
             android:gravity="center_vertical"
-            android:hint="Set reminder Data" />
+            android:hint="@string/set_reminder_data" />
 
         <ImageButton
             android:id="@+id/ib_date_clean"
@@ -72,7 +72,7 @@
             android:drawablePadding="16dp"
             android:drawableStart="@drawable/ic_time"
             android:gravity="center_vertical"
-            android:hint="Set reminder Time"
+            android:hint="@string/set_reminder_time"
             android:visibility="gone" />
 
         <ImageButton

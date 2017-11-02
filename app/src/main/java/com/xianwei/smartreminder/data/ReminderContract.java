@@ -32,7 +32,7 @@ public final class ReminderContract {
         public static final Uri CONTENT_URL =
                 Uri.withAppendedPath(BASE_CONTENT_RUL, PATH_LOCATION_REMINDER);
 
-        public static final String TABLE_NAME = "Location_reminder";
+        public static final String TABLE_NAME = "location_reminder";
         public static final String _ID = BaseColumns._ID;
         public static final String COLUMN_NAME_TASK = "task";
         public static final String COLUMN_NAME_LOCATION_NAME = "location_name";

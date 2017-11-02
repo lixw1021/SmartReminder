@@ -123,6 +123,7 @@ public class TaskDoneFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, final Cursor newCursor) {
+        if (newCursor == null || newCursor.getCount() < 0) return;
         if (loader.getId() == FINISHED_TIME_LOADER_ID) {
             timeReminderAdapter.swapCursor(newCursor);
         } else if (loader.getId() == FINISHED_LOCATION_LOADER_ID) {

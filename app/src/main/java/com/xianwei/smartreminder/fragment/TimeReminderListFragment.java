@@ -35,9 +35,6 @@ public class TimeReminderListFragment extends Fragment
     private static final int DATABASE_FALSE = 0;
     private static final int DATABASE_TRUE = 1;
     private static final int TIME_LOADER_ID = 100;
-    private static final String ID_KEY = "id";
-    private static final String MILLISECONDS_KEY = "milliseconds";
-    private static final String TASK_KEY = "task";
 
     private TimeReminderAdapter timeReminderAdapter;
 
@@ -103,9 +100,9 @@ public class TimeReminderListFragment extends Fragment
                 String task = cursor
                         .getString(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK));
                 Bundle bundle = new Bundle();
-                bundle.putInt(ID_KEY, id);
-                bundle.putLong(MILLISECONDS_KEY, milliseconds);
-                bundle.putString(TASK_KEY, task);
+                bundle.putInt(NotificationUtils.EXTRA_TASK_ID, id);
+                bundle.putLong(NotificationUtils.EXTRA_TASK_MILLISECONDS, milliseconds);
+                bundle.putString(NotificationUtils.EXTRA_TASK_TITLE, task);
                 NotificationUtils.setupNotificationService(getContext(), bundle);
                 break;
             }

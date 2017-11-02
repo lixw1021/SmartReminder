@@ -17,8 +17,8 @@
             android:layout_marginBottom="@dimen/margin_vertical"
             android:layout_marginStart="@dimen/margin_horizontal"
             android:layout_marginTop="@dimen/margin_vertical"
-            android:text="Finished Time Reminder"
-            android:textColor="@android:color/black" />
+            android:text="@string/finished_time_reminder"
+            android:textColor="@color/colorPrimary" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_finished_time_reminder"
@@ -34,8 +34,8 @@
             android:layout_marginBottom="@dimen/margin_vertical"
             android:layout_marginStart="@dimen/margin_horizontal"
             android:layout_marginTop="@dimen/margin_vertical"
-            android:text="Finished Location Reminder"
-            android:textColor="@android:color/black" />
+            android:text="@string/finished_location_reminder"
+            android:textColor="@color/colorPrimary" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_finished_location_reminder"

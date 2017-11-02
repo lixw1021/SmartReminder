@@ -21,14 +21,12 @@ import java.util.List;
 
 public class ReminderTasks {
 
-    public static final String ACTION_TIME_TASK_DONE = "time-task-done";
-    public static final String ACTION_TIME_TASK_POSTPONE = "task-postpone";
-    public static final String ACTION_TIME_TASK_REMINDER = "time-reminder";
-    public static final String ACTION_LOCATION_TASK_REMINDER = "location-reminder";
-    public static final String ACTION_LOCATION_TASK_DONE = "location-reminder-done";
-    private static final String ID_KEY = "id";
-    private static final String MILLISECONDS_KEY = "milliseconds";
-    private static final String TASK_KEY = "task";
+    public static final String ACTION_TIME_TASK_DONE = "com.xianwei.action.TIME_TASK_DONE";
+    public static final String ACTION_TIME_TASK_POSTPONE = "com.xianwei.action.TIME_TASK_POSTPONE";
+    public static final String ACTION_TIME_TASK_REMINDER = "com.xianwei.action.TIME_TASK_REMINDER";
+    public static final String ACTION_LOCATION_TASK_REMINDER = "com.xianwei.action.LOCATION_TASK_REMINDER";
+    public static final String ACTION_LOCATION_TASK_DONE = "com.xianwei.action.LOCATION_TASK_DONE";
+
     private static final int DATABASE_TRUE = 1;
     private static final int DATABASE_FALSE = 0;
     private static final long MILLISECOND_FIFTEEN_MINUTE = 15 * 60 * 1000;
@@ -36,23 +34,23 @@ public class ReminderTasks {
     public static void executeTask(Context context, Intent intent) {
         String action = intent.getAction();
         if (ACTION_TIME_TASK_DONE.equals(action)) {
-            int id = intent.getIntExtra(ID_KEY, -1);
+            int id = intent.getIntExtra(NotificationUtils.EXTRA_TASK_ID, -1);
             finishTask(context, id);
 
         } else if (ACTION_TIME_TASK_POSTPONE.equals(action)) {
-            int id = intent.getIntExtra(ID_KEY, -1);
-            long milliseconds = intent.getLongExtra(MILLISECONDS_KEY, 0);
+            int id = intent.getIntExtra(NotificationUtils.EXTRA_TASK_ID, -1);
+            long milliseconds = intent.getLongExtra(NotificationUtils.EXTRA_TASK_MILLISECONDS, 0);
             postponeTask(context, id, milliseconds);
 
         } else if (ACTION_TIME_TASK_REMINDER.equals(action)) {
             NotificationUtils.timeReminder(context, intent);
-            long milliseconds = intent.getLongExtra(MILLISECONDS_KEY, 0);
+            long milliseconds = intent.getLongExtra(NotificationUtils.EXTRA_TASK_MILLISECONDS, 0);
             setupNextNotification(context, milliseconds);
 
         } else if (ACTION_LOCATION_TASK_REMINDER.equals(action)) {
             NotificationUtils.locationReminder(context, intent);
         } else if (ACTION_LOCATION_TASK_DONE.equals(action)) {
-            int id = intent.getIntExtra(ID_KEY, -1);
+            int id = intent.getIntExtra(NotificationUtils.EXTRA_TASK_ID, -1);
             updateLocationTask(context, id);
         }
     }
@@ -96,18 +94,18 @@ public class ReminderTasks {
                             cursor.getString(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK));
                     int taskId = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry._ID));
                     Intent intent = new Intent();
-                    intent.putExtra(ID_KEY, taskId);
-                    intent.putExtra(MILLISECONDS_KEY, milliseconds);
-                    intent.putExtra(TASK_KEY, task);
+                    intent.putExtra(NotificationUtils.EXTRA_TASK_ID, taskId);
+                    intent.putExtra(NotificationUtils.EXTRA_TASK_MILLISECONDS, milliseconds);
+                    intent.putExtra(NotificationUtils.EXTRA_TASK_TITLE, task);
                     NotificationUtils.timeReminder(context, intent);
                 } else if (milliseconds > currentMilliseconds) {
                     String task =
                             cursor.getString(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK));
                     int taskId = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry._ID));
                     Bundle bundle = new Bundle();
-                    bundle.putInt(ID_KEY, taskId);
-                    bundle.putLong(MILLISECONDS_KEY, milliseconds);
-                    bundle.putString(TASK_KEY, task);
+                    bundle.putInt(NotificationUtils.EXTRA_TASK_ID, taskId);
+                    bundle.putLong(NotificationUtils.EXTRA_TASK_MILLISECONDS, milliseconds);
+                    bundle.putString(NotificationUtils.EXTRA_TASK_TITLE, task);
                     NotificationUtils.setupNotificationService(context, bundle);
                     break;
                 }

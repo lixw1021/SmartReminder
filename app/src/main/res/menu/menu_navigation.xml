@@ -5,11 +5,11 @@
         <item
             android:id="@+id/menu_done"
             android:icon="@drawable/ic_checked"
-            android:title="Done" />
+            android:title="@string/men_done" />
         <item
             android:id="@+id/menu_settings"
             android:icon="@drawable/ic_settings"
-            android:title="Settings" />
+            android:title="@string/men_settings" />
 
     </group>
 
@@ -18,7 +18,7 @@
         <item
             android:id="@+id/menu_remove_ads"
             android:icon="@drawable/ic_pro"
-            android:title="Remove Ads" />
+            android:title="@string/menu_remove_ads" />
     </group>
 
     <group android:checkableBehavior="single"
@@ -26,11 +26,12 @@
         <item
             android:id="@+id/menu_feedback"
             android:icon="@drawable/ic_feedback"
-            android:title="Feedback" />
+            android:title="@string/menu_feedback" />
         <item
             android:id="@+id/menu_about"
             android:icon="@drawable/ic_info"
-            android:title="About" />
+            android:title="@string/men_about" />
+
     </group>
 
 </menu>

@@ -23,9 +23,9 @@ import com.xianwei.smartreminder.service.ReminderTasks;
 * */
 public class NotificationUtils {
 
-    private static final String ID_KEY = "id";
-    private static final String MILLISECONDS_KEY = "milliseconds";
-    private static final String TASK_KEY = "task";
+    public static final String EXTRA_TASK_ID = "com.xianwei.extra.TASK_ID";
+    public static final String EXTRA_TASK_MILLISECONDS = "com.xianwei.extra.TASK_MILLISECONDS";
+    public static final String EXTRA_TASK_TITLE = "com.xianwei.extra.TASK_TITLE";
 
     //make sure it won't equal to time reminder notification id
     public static final int LOCATION_NOTIFICATION_ID = -100;
@@ -39,7 +39,7 @@ public class NotificationUtils {
     }
 
     public static void locationReminder(Context context, Intent intent) {
-        String task = intent.getStringExtra("task");
+        String task = intent.getStringExtra(EXTRA_TASK_TITLE);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_location)
                 .setContentText(task)
@@ -55,7 +55,7 @@ public class NotificationUtils {
     }
 
     private static Action locationTaskDone(Context context, Intent intent) {
-        int taskId = intent.getIntExtra(ID_KEY, 0);
+        int taskId = intent.getIntExtra(EXTRA_TASK_ID, 0);
         Intent locationTaskDoneIntent = new Intent(context, ReminderIntentService.class);
         locationTaskDoneIntent.setAction(ReminderTasks.ACTION_LOCATION_TASK_DONE);
         locationTaskDoneIntent.putExtras(intent);
@@ -65,12 +65,15 @@ public class NotificationUtils {
                 locationTaskDoneIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        return new Action(R.drawable.ic_location, "Task Finish", taskDonePendingIntent);
+        return new Action(
+                R.drawable.ic_location,
+                context.getString(R.string.notification_task_finish),
+                taskDonePendingIntent);
     }
 
     public static void timeReminder(Context context, Intent intent) {
-        String task = intent.getStringExtra(TASK_KEY);
-        int taskId = intent.getIntExtra(ID_KEY, 0);
+        String task = intent.getStringExtra(EXTRA_TASK_TITLE);
+        int taskId = intent.getIntExtra(EXTRA_TASK_ID, 0);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_time)
                 .setContentText(task)
@@ -96,7 +99,7 @@ public class NotificationUtils {
     }
 
     private static Action taskDone(Context context, Intent intent) {
-        int taskId = intent.getIntExtra(ID_KEY, 0);
+        int taskId = intent.getIntExtra(EXTRA_TASK_ID, 0);
         Intent taskDoneIntent = new Intent(context, ReminderIntentService.class);
         taskDoneIntent.setAction(ReminderTasks.ACTION_TIME_TASK_DONE);
         taskDoneIntent.putExtras(intent);
@@ -106,11 +109,14 @@ public class NotificationUtils {
                 taskDoneIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        return new Action(R.drawable.ic_time, "Task Finish", taskDonePendingIntent);
+        return new Action(
+                R.drawable.ic_time,
+                context.getString(R.string.notification_task_finish),
+                taskDonePendingIntent);
     }
 
     private static Action taskPostpone(Context context, Intent intent) {
-        int taskId = intent.getIntExtra(ID_KEY, 0);
+        int taskId = intent.getIntExtra(EXTRA_TASK_ID, 0);
         Intent taskPostponeIntent = new Intent(context, ReminderIntentService.class);
         taskPostponeIntent.setAction(ReminderTasks.ACTION_TIME_TASK_POSTPONE);
         taskPostponeIntent.putExtras(intent);
@@ -120,12 +126,15 @@ public class NotificationUtils {
                 taskPostponeIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        return new Action(R.drawable.ic_time, "PostPone 15 min", taskPostponePendingIntent);
+        return new Action(
+                R.drawable.ic_time,
+                context.getString(R.string.notification_postphone_15_min),
+                taskPostponePendingIntent);
     }
 
 
     public static void setupNotificationService(Context context, Bundle bundle) {
-        long milliseconds = bundle.getLong(MILLISECONDS_KEY);
+        long milliseconds = bundle.getLong(EXTRA_TASK_MILLISECONDS);
         Intent intent = new Intent(context, ReminderIntentService.class);
         intent.setAction(ReminderTasks.ACTION_TIME_TASK_REMINDER);
         intent.putExtras(bundle);

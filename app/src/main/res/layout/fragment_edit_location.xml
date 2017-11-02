@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_horizontal"
         android:layout_marginTop="16dp"
-        android:text="Task :"
+        android:text="@string/task"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/item_subtitle_size" />
 
@@ -21,7 +21,7 @@
         android:layout_below="@+id/tv_task"
         android:layout_marginEnd="@dimen/margin_horizontal"
         android:layout_marginStart="@dimen/margin_horizontal"
-        android:hint="Enter TO_DO Here"
+        android:hint="@string/enter_to_do_here"
         android:textSize="@dimen/item_subtitle_size" />
 
     <TextView
@@ -31,7 +31,7 @@
         android:layout_below="@id/et_location_task"
         android:layout_marginStart="@dimen/margin_horizontal"
         android:layout_marginTop="16dp"
-        android:text="Location Name :"
+        android:text="@string/location_name"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/item_subtitle_size" />
 
@@ -42,7 +42,7 @@
         android:layout_below="@+id/tv_location_name"
         android:layout_marginEnd="@dimen/margin_horizontal"
         android:layout_marginStart="@dimen/margin_horizontal"
-        android:hint="Enter location name"
+        android:hint="@string/enter_location_name"
         android:textSize="@dimen/item_subtitle_size" />
 
     <TextView
@@ -52,7 +52,7 @@
         android:layout_below="@id/et_location_name"
         android:layout_marginStart="@dimen/margin_horizontal"
         android:layout_marginTop="16dp"
-        android:text="Reminder radius ( m ) :"
+        android:text="@string/reminder_radius_m"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/item_subtitle_size" />
 
@@ -63,7 +63,7 @@
         android:layout_below="@+id/tv_location_reminder_radius"
         android:layout_marginEnd="@dimen/margin_horizontal"
         android:layout_marginStart="@dimen/margin_horizontal"
-        android:hint="Enter radius : 20 ~ 10000"
+        android:hint="@string/enter_radius_20_10000"
         android:inputType="number"
         android:textSize="@dimen/item_subtitle_size" />
 
@@ -77,7 +77,7 @@
         android:drawablePadding="16dp"
         android:drawableStart="@drawable/ic_location"
         android:gravity="center_vertical"
-        android:text="Pick reminder location"
+        android:text="@string/pick_reminder_location"
         android:textSize="@dimen/item_subtitle_size" />
 
 

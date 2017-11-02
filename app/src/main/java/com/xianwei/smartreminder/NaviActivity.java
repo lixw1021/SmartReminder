@@ -3,7 +3,6 @@ package com.xianwei.smartreminder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -18,10 +17,16 @@ import com.xianwei.smartreminder.fragment.TaskDoneFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NavigationActivity extends AppCompatActivity {
+public class NaviActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_navigation)
     Toolbar toolbar;
 
+    public static final String EXTRA_FRAGMENT_NAME = "com.xianwei.extra.FRAGMENT_NAME";
+    public static final String EXTRA_TASK_DONE = "com.xianwei.extra.TASK_DONE";
+    public static final String EXTRA_SETTING = "com.xianwei.extra.SETTING";
+    public static final String EXTRA_REMOVE_AD = "com.xianwei.extra.REMOVE_AD";
+    public static final String EXTRA_FEEDBACK = "com.xianwei.extra.FEEDBACK";
+    public static final String EXTRA_ABOUT = "com.xianwei.extra.ABOUT";
     Fragment fragment;
 
     @Override
@@ -34,33 +39,33 @@ public class NavigationActivity extends AppCompatActivity {
         this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
         Intent intent = getIntent();
-        if (intent.hasExtra("fragmentName") && savedInstanceState == null) {
-            launchFragment(intent.getStringExtra("fragmentName"));
+        if (intent.hasExtra(EXTRA_FRAGMENT_NAME) && savedInstanceState == null) {
+            launchFragment(intent.getStringExtra(EXTRA_FRAGMENT_NAME));
         }
         setSupportActionBar(toolbar);
     }
 
     private void launchFragment(String fragmentName) {
         switch (fragmentName) {
-            case "taskDone":
+            case EXTRA_TASK_DONE:
                 fragment = new TaskDoneFragment();
-                toolbar.setTitle("Finished tasks");
+                toolbar.setTitle(getString(R.string.men_done));
                 break;
-            case "setting":
+            case EXTRA_SETTING:
                 fragment = new SettingFragment();
-                toolbar.setTitle("Setting");
+                toolbar.setTitle(R.string.men_settings);
                 break;
-            case "removeAd":
+            case EXTRA_REMOVE_AD:
                 fragment = new RemoveAdFragment();
-                toolbar.setTitle("Remove Ad");
+                toolbar.setTitle(R.string.menu_remove_ads);
                 break;
-            case "feedback":
+            case EXTRA_FEEDBACK:
                 fragment = new FeedbackFragment();
-                toolbar.setTitle("Feedback");
+                toolbar.setTitle(R.string.menu_feedback);
                 break;
-            case "about":
+            case EXTRA_ABOUT:
                 fragment = new AboutFragment();
-                toolbar.setTitle("About");
+                toolbar.setTitle(R.string.men_about);
                 break;
             default:
                 break;

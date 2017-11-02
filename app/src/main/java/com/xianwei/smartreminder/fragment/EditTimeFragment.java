@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +22,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.xianwei.TimeRecognition;
+import com.xianwei.smartreminder.EditActivity;
 import com.xianwei.smartreminder.R;
 import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
 import com.xianwei.smartreminder.module.DateAndTime;
@@ -53,10 +53,10 @@ public class EditTimeFragment extends Fragment {
     @BindView(R.id.ib_delete)
     ImageButton deleteBtn;
 
-    private static String DATE_KEY = "date";
-    private static String TIME_KEY = "time";
-    private static int DATABASE_TRUE = 1;
-    private static int DATABASE_FALSE = 0;
+    private static final String DATE_KEY = "saved_date";
+    private static final String TIME_KEY = "saved_time";
+    private static final int DATABASE_TRUE = 1;
+    private static final int DATABASE_FALSE = 0;
 
     private int hasTime = DATABASE_FALSE;
     private int taskDone = DATABASE_FALSE;
@@ -80,8 +80,8 @@ public class EditTimeFragment extends Fragment {
         setHasOptionsMenu(true);
         bundle = this.getArguments();
         if (bundle != null) {
-            itemId = bundle.getInt("itemId", -1);
-            String task = bundle.getString("voiceInput");
+            itemId = bundle.getInt(EditActivity.EXTRA_ITEM_ID, -1);
+            String task = bundle.getString(EditActivity.EXTRA_VOICE_INPUT);
             if (itemId > -1) {
                 setupItemInfo(itemId);
             }
@@ -104,15 +104,6 @@ public class EditTimeFragment extends Fragment {
                     dateClearBtn.setVisibility(View.VISIBLE);
                     timeCleanBtn.setVisibility(View.VISIBLE);
                 }
-
-//                Log.i("12345pickedYear",  " " + pickedYear);
-//                Log.i("12345pickedMonth", " " + pickedMonth);
-//                Log.i("12345pickedDay",  " " +pickedDay);
-//                Log.i("12345pickedHour", " " + pickedHour);
-//                Log.i("12345pickedMinute",  " " +pickedMinute);
-//                Log.i("12345targetMillisecond", " " + timeRecognition.getTargetMillisecond());
-//                Log.i("12345hastime", String.valueOf(timeRecognition.hasTime()));
-//                Log.i("12345hasdate", String.valueOf(timeRecognition.hasDate()));
             }
         }
         return view;
@@ -259,7 +250,7 @@ public class EditTimeFragment extends Fragment {
         Uri uri = Uri.withAppendedPath(TimeEntry.CONTENT_URL, String.valueOf(itemId));
         getContext().getContentResolver().delete(uri, null, null);
         getActivity().finish();
-        showToast("Reminder deleted");
+        showToast(getString(R.string.toast_reminder_delete));
     }
 
     @Override
@@ -288,9 +279,9 @@ public class EditTimeFragment extends Fragment {
                 getContext().getContentResolver().insert(TimeEntry.CONTENT_URL, values);
             }
             getActivity().finish();
-            showToast("Reminder Saved");
+            showToast(getString(R.string.toast_reminder_saved));
         } else {
-            showToast("Please add a task");
+            showToast(getString(R.string.toast_please_add_a_task));
         }
     }
 
@@ -303,12 +294,6 @@ public class EditTimeFragment extends Fragment {
         values.put(TimeEntry.COLUMN_NAME_MILLISECOND, timeInMilliseconds);
         values.put(TimeEntry.COLUMN_NAME_HAS_TIME, hasTime);
         values.put(TimeEntry.COLUMN_NAME_TASK_DONE, DATABASE_FALSE);
-        Log.i("12345savedYear",  " " + pickedYear);
-        Log.i("12345savedMonth", " " + pickedMonth);
-        Log.i("12345savedDay",  " " +pickedDay);
-        Log.i("12345savedHour", " " + pickedHour);
-        Log.i("12345savedMinute",  " " +pickedMinute);
-
         return values;
     }
 

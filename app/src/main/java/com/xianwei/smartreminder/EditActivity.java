@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 
 import com.hannesdorfmann.swipeback.Position;
@@ -26,6 +25,14 @@ public class EditActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_edit)
     Toolbar toolbar;
 
+
+    public static final String EXTRA_PAGE_ID = "com.xianwei.extra.PAGE_ID";
+    public static final String EXTRA_VOICE_INPUT = "com.xianwei.extra.VOICE_INPUT";
+    public static final String EXTRA_EDIT_FRAGMENT = "com.xianwei.extra.EDIT_FRAGMENT";
+    public static final String EXTRA_TIME_EDIT = "com.xianwei.extra.TIME_EDIT";
+    public static final String EXTRA_LOCATION_EDIT = "com.xianwei.extra.LOCATION_EDIT";
+    public static final String EXTRA_ITEM_ID = "com.xianwei.extra.ITEM_ID";
+
     Fragment fragment;
 
     @Override
@@ -38,22 +45,22 @@ public class EditActivity extends AppCompatActivity {
         this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
         Intent intent = getIntent();
-        if (intent.hasExtra("pageId") && savedInstanceState == null) {
-            toolbar.setTitle("New Task");
-            if (intent.hasExtra("voiceInput")) {
+        if (intent.hasExtra(EXTRA_PAGE_ID) && savedInstanceState == null) {
+            toolbar.setTitle(getString(R.string.toolbar_title_new_task));
+            if (intent.hasExtra(EXTRA_VOICE_INPUT)) {
                 setupVoiceInputFragment(intent);
             } else {
                 setupFragment(intent);
             }
-        } else if (intent.hasExtra("editFragment") && savedInstanceState == null) {
-            toolbar.setTitle("Edit Task");
+        } else if (intent.hasExtra(EXTRA_EDIT_FRAGMENT) && savedInstanceState == null) {
+            toolbar.setTitle(getString(R.string.toolbar_title_edit_task));
             setupEditFragment(intent);
         }
         setSupportActionBar(toolbar);
     }
 
     private void setupVoiceInputFragment(Intent intent) {
-        int pageId = intent.getIntExtra("pageId", 0);
+        int pageId = intent.getIntExtra(EXTRA_PAGE_ID, 0);
         Bundle bundle = intent.getExtras();
 
         fragment = (pageId == 0) ? new EditTimeFragment() : new EditLocationFragment();
@@ -65,7 +72,7 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void setupFragment(Intent intent) {
-        int pageId = intent.getIntExtra("pageId", 0);
+        int pageId = intent.getIntExtra(EXTRA_PAGE_ID, 0);
         fragment = (pageId == 0) ? new EditTimeFragment() : new EditLocationFragment();
 
         getSupportFragmentManager()
@@ -75,8 +82,8 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void setupEditFragment(Intent intent) {
-        String name = intent.getStringExtra("editFragment");
-        fragment = (name.equals("timeEdit")) ? new EditTimeFragment() : new EditLocationFragment();
+        String name = intent.getStringExtra(EXTRA_EDIT_FRAGMENT);
+        fragment = (name.equals(EXTRA_TIME_EDIT)) ? new EditTimeFragment() : new EditLocationFragment();
         Bundle bundle = intent.getExtras();
         fragment.setArguments(bundle);
         getSupportFragmentManager()
