@@ -17,8 +17,8 @@
         <TextView
             android:id="@+id/tv_time_reminder_title"
             style="@style/reminder_title"
-            app:layout_constraintEnd_toStartOf="@+id/checkbox_time_reminder"
             app:layout_constraintBottom_toTopOf="@+id/tv_task_time"
+            app:layout_constraintEnd_toStartOf="@+id/checkbox_time_reminder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Go to Walmart" />
@@ -29,9 +29,9 @@
             android:layout_marginBottom="@dimen/margin_vertical"
             android:layout_marginTop="@dimen/margin_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_task_date"
             app:layout_constraintStart_toStartOf="@+id/tv_time_reminder_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_time_reminder_title"
-            app:layout_constraintEnd_toStartOf="@+id/tv_task_date"
             tools:text="10:15 AM" />
 
         <TextView
@@ -47,6 +47,7 @@
             android:layout_width="@dimen/checkbox_size"
             android:layout_height="@dimen/checkbox_size"
             android:layout_marginEnd="@dimen/margin_horizontal"
+            android:contentDescription="@string/description_make_task_as_done"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

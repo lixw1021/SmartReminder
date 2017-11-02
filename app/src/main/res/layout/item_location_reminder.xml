@@ -40,7 +40,8 @@
             android:layout_marginEnd="@dimen/margin_horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/description_make_task_as_done"/>
 
 
     </android.support.constraint.ConstraintLayout>

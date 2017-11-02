@@ -112,7 +112,7 @@
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:paddingBottom="4dp"
-            android:text="http://www.google.com/policies/privacy"
+            android:text="@string/http_www_google_com_policies_privacy"
             android:textAlignment="center" />
     </LinearLayout>
 

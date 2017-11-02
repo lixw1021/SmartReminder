@@ -44,4 +44,15 @@
     <string name="toast_please_enter_radius">Please enter a radius</string>
     <string name="toast_please_enter_a_valid_radius">Please enter a valid radius</string>
 
+    <string name="description_add_new_reminder_task">add new reminder task</string>
+    <string name="description_add_task_using_voice_input">add task using voice input</string>
+    <string name="description_application_navigation">application navigation</string>
+    <string name="description_clean_selected_date">clean selected date</string>
+    <string name="description_clean_selected_time">clean selected time</string>
+    <string name="description_delete_task">delete task</string>
+    <string name="description_make_task_as_done">make task as done</string>
+
+    <string name="http_www_google_com_policies_privacy">http://www.google.com/policies/privacy</string>
+    <string name="widget_title">Reminders</string>
+    <string name="add_widget">Add widget</string>
 </resources>

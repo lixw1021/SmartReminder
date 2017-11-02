@@ -29,14 +29,28 @@
 
         <provider
             android:name=".data.ReminderProvider"
-            android:authorities="com.xianwei.smartreminder" />
+            android:authorities="com.xianwei.smartreminder"
+            android:exported="true"/>
 
         <service
             android:name=".service.ReminderIntentService"
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".NaviActivity"></activity>
+        <activity android:name=".NaviActivity" />
+
+        <receiver android:name=".widget.TimeReminderWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/new_app_widget_info" />
+        </receiver>
+
+        <service android:name=".widget.TimeReminderWidgetRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
     </application>
 
 </manifest>
