@@ -29,6 +29,18 @@ public class ExtractUtil {
         return 0;
     }
 
+    public static int getDay(String voiceInput) {
+        String[] wordsArray = voiceInput.split(" ");
+        for (int i = 1; i < wordsArray.length; i++) {
+            if (wordsArray[i].equals("day") || wordsArray[i].equals("days") ) {
+                if (wordsArray[i - 1].matches("\\d+")) {
+                    return Integer.parseInt(wordsArray[i -1]);
+                }
+            }
+        }
+        return -1;
+    }
+
     public static int extractWeekday(String voiceInput) {
         if (voiceInput == null || voiceInput.isEmpty()) return -1;
 

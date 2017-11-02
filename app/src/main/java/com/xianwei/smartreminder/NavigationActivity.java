@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.hannesdorfmann.swipeback.Position;
 import com.hannesdorfmann.swipeback.SwipeBack;
@@ -18,6 +19,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class NavigationActivity extends AppCompatActivity {
+    @BindView(R.id.toolbar_navigation)
+    Toolbar toolbar;
+
     Fragment fragment;
 
     @Override
@@ -30,31 +34,38 @@ public class NavigationActivity extends AppCompatActivity {
         this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
         Intent intent = getIntent();
-        if (intent.hasExtra("fragmentName")) {
+        if (intent.hasExtra("fragmentName") && savedInstanceState == null) {
             launchFragment(intent.getStringExtra("fragmentName"));
         }
+        setSupportActionBar(toolbar);
     }
 
     private void launchFragment(String fragmentName) {
         switch (fragmentName) {
             case "taskDone":
                 fragment = new TaskDoneFragment();
+                toolbar.setTitle("Finished tasks");
                 break;
             case "setting":
                 fragment = new SettingFragment();
+                toolbar.setTitle("Setting");
                 break;
             case "removeAd":
                 fragment = new RemoveAdFragment();
+                toolbar.setTitle("Remove Ad");
                 break;
             case "feedback":
                 fragment = new FeedbackFragment();
+                toolbar.setTitle("Feedback");
                 break;
             case "about":
                 fragment = new AboutFragment();
+                toolbar.setTitle("About");
                 break;
             default:
                 break;
         }
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.navigation_fragment_container , fragment)

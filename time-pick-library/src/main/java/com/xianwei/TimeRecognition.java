@@ -29,12 +29,8 @@ public class TimeRecognition {
     private Calendar calendar;
 
     public TimeRecognition(String voiceInput) {
-        this.voiceInput =  voiceInput.toLowerCase();
         setupCurrentTime();
-        extractInfor(this.voiceInput);
-    }
 
-    private void extractInfor(String voiceInput) {
         if (voiceInput.contains("a.m.") || voiceInput.contains("p.m.")) {
             extractFromPatternOne(voiceInput);
         } else if (voiceInput.contains("hour") || voiceInput.contains("minute")) {
@@ -76,7 +72,9 @@ public class TimeRecognition {
             } else {
                 targetDayMillisecond = todayMillisecond + toMillisecond((weekday - currentDayOfWeek), 0, 0);
             }
-        } else {
+        }
+
+        if (targetDayMillisecond < 0){
             int[] monthAndDay = ExtractUtil.extractMonthAndDay(voiceInput);
             pickedMonth = monthAndDay[0];
             pickedDay = monthAndDay[1];
@@ -96,6 +94,7 @@ public class TimeRecognition {
                 targetDayMillisecond = cal.getTimeInMillis();
             }
         }
+
         if (targetDayMillisecond < 0) {
             if (voiceInput.contains("day after tomorrow")) {
                 targetDayMillisecond = todayMillisecond + toMillisecond(2, 0, 0);
@@ -105,6 +104,16 @@ public class TimeRecognition {
                 targetDayMillisecond = todayMillisecond;
             }
         }
+
+        if (targetDayMillisecond < 0) {
+            if (voiceInput.contains("day")) {
+                pickedDay = ExtractUtil.getDay(voiceInput);
+            }
+            if (pickedDay > 0) {
+                targetDayMillisecond = todayMillisecond + toMillisecond(pickedDay, 0, 0);
+            }
+        }
+
         if (targetDayMillisecond > 0) {
             hasDate = true;
             targetMillisecond = targetDayMillisecond;
@@ -152,7 +161,8 @@ public class TimeRecognition {
                 if (minuteString.matches("\\d+")) {
                     int minute = Integer.parseInt(minuteString);
                     pickedMinute = minute % 60;
-                    pickedHour = minute / 60;
+                    if (pickedHour < 0) pickedHour = 0;
+                    pickedHour = pickedHour + minute / 60;
                     hasDate = true;
                     hasTime = true;
                 }
@@ -161,6 +171,7 @@ public class TimeRecognition {
                 String hourString = wordsArray.get(i - 1);
                 if (hourString.matches("\\d+")) {
                     int hour = Integer.parseInt(hourString);
+                    if (pickedHour < 0) pickedHour = 0;
                     pickedHour = hour + pickedHour;
                     hasDate = true;
                     hasTime = true;

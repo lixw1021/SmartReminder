@@ -37,9 +37,6 @@ public class EditActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
-
-
-
         Intent intent = getIntent();
         if (intent.hasExtra("pageId") && savedInstanceState == null) {
             toolbar.setTitle("New Task");

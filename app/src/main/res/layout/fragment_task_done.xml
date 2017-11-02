@@ -1,13 +1,48 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/finished_scroll_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.xianwei.smartreminder.fragment.TaskDoneFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context="com.xianwei.smartreminder.fragment.TaskDoneFragment">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/tv_finished_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_vertical"
+            android:layout_marginStart="@dimen/margin_horizontal"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:text="Finished Time Reminder"
+            android:textColor="@android:color/black" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_finished_time_reminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_finished_time" />
+
+        <TextView
+            android:id="@+id/tv_finished_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rv_finished_time_reminder"
+            android:layout_marginBottom="@dimen/margin_vertical"
+            android:layout_marginStart="@dimen/margin_horizontal"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:text="Finished Location Reminder"
+            android:textColor="@android:color/black" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_finished_location_reminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_finished_location" />
+
+    </RelativeLayout>
+
+</ScrollView>

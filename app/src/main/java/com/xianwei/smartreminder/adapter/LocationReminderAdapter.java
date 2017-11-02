@@ -69,18 +69,22 @@ public class LocationReminderAdapter extends RecyclerView.Adapter<LocationRemind
             @Override
             public void onClick(View v) {
                 if (holder.checkBox.isChecked()) {
-                    Uri itemUri = ContentUris.withAppendedId(LocationEntry.CONTENT_URL, id );
-                    updateItem(itemUri);
+                    updateItem(id, DATABASE_TRUE);
                     unregisterGeofence(placeId);
                     Toast.makeText(context, "Task finished", Toast.LENGTH_SHORT).show();
+                } else if (!holder.checkBox.isChecked()) {
+                    updateItem(id, DATABASE_FALSE);
+                    registerGeofence(id);
+                    Toast.makeText(context, "Task forward to undo", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private void updateItem(Uri itemUri) {
+    private void updateItem(int id, int hasDone) {
+        Uri itemUri = ContentUris.withAppendedId(LocationEntry.CONTENT_URL, id );
         ContentValues values = new ContentValues();
-        values.put(LocationEntry.COLUMN_NAME_TASK_DONE, DATABASE_TRUE);
+        values.put(LocationEntry.COLUMN_NAME_TASK_DONE, hasDone);
         context.getContentResolver().update(itemUri, values, null, null );
     }
 
@@ -89,6 +93,11 @@ public class LocationReminderAdapter extends RecyclerView.Adapter<LocationRemind
         placeIds.add(placeId);
         Geofencing geofence = new Geofencing(context);
         geofence.unRegisterGeofence(placeIds);
+    }
+
+    private void registerGeofence(int rowId) {
+        Geofencing geofence = new Geofencing(context);
+        geofence.buildGeofence(rowId);
     }
 
     @Override

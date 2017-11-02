@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/delete_all_time_reminder"
+        android:title="Dekete all time Reminder"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/delete_all_location_reminder"
+        android:title="Dekete all location Reminder"
+        app:showAsAction="never" />
+</menu>

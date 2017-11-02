@@ -105,14 +105,14 @@ public class EditTimeFragment extends Fragment {
                     timeCleanBtn.setVisibility(View.VISIBLE);
                 }
 
-                Log.i("12345pickedYear",  " " + pickedYear);
-                Log.i("12345pickedMonth", " " + pickedMonth);
-                Log.i("12345pickedDay",  " " +pickedDay);
-                Log.i("12345pickedHour", " " + pickedHour);
-                Log.i("12345pickedMinute",  " " +pickedMinute);
-                Log.i("12345targetMillisecond", " " + timeRecognition.getTargetMillisecond());
-                Log.i("12345hastime", String.valueOf(timeRecognition.hasTime()));
-                Log.i("12345hasdate", String.valueOf(timeRecognition.hasDate()));
+//                Log.i("12345pickedYear",  " " + pickedYear);
+//                Log.i("12345pickedMonth", " " + pickedMonth);
+//                Log.i("12345pickedDay",  " " +pickedDay);
+//                Log.i("12345pickedHour", " " + pickedHour);
+//                Log.i("12345pickedMinute",  " " +pickedMinute);
+//                Log.i("12345targetMillisecond", " " + timeRecognition.getTargetMillisecond());
+//                Log.i("12345hastime", String.valueOf(timeRecognition.hasTime()));
+//                Log.i("12345hasdate", String.valueOf(timeRecognition.hasDate()));
             }
         }
         return view;

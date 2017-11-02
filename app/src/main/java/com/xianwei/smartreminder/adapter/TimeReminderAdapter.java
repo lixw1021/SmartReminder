@@ -80,16 +80,20 @@ public class TimeReminderAdapter extends RecyclerView.Adapter<TimeReminderAdapte
             public void onClick(View v) {
                 if (holder.checkBox.isChecked()) {
                     Uri itemUri = ContentUris.withAppendedId(TimeEntry.CONTENT_URL, id);
-                    updateItem(itemUri);
+                    updateItem(itemUri, DATABASE_TRUE);
                     Toast.makeText(context, "Task finished", Toast.LENGTH_SHORT).show();
+                } else if (!holder.checkBox.isChecked()) {
+                    Uri itemUri = ContentUris.withAppendedId(TimeEntry.CONTENT_URL, id);
+                    updateItem(itemUri, DATABASE_FALSE);
+                    Toast.makeText(context, "Task forward to undo", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private void updateItem(Uri itemUri) {
+    private void updateItem(Uri itemUri, int taskDone) {
         ContentValues values = new ContentValues();
-        values.put(TimeEntry.COLUMN_NAME_TASK_DONE, DATABASE_TRUE);
+        values.put(TimeEntry.COLUMN_NAME_TASK_DONE, taskDone);
         context.getContentResolver().update(itemUri, values, null, null );
     }
 
