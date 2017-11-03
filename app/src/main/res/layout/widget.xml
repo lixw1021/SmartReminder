@@ -15,7 +15,7 @@
         android:background="@color/colorPrimary"
         android:text="@string/widget_title"
         android:textColor="@color/colorWhite"
-        android:textSize="24sp"
+        android:textSize="@dimen/widget_title_size"
         android:textStyle="bold|italic" />
 
     <ListView

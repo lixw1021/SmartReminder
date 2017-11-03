@@ -58,7 +58,7 @@
     <string name="feedback_question">Find any bug or have suggestions ?    Please, let me know, and I will make the best to improve this App.</string>
     <string name="enter_your_feedback_here">Enter your feedback here</string>
     <string name="send_feedback">Send feedback</string>
-    <string name="feedback_email">lixw1021@gmail.com</string>
+    <string name="feedback_email" translatable="false">lixw1021@gmail.com</string>
     <string name="version_1_0">Version 1.0</string>
     <string name="by_xianwei">by xianwei</string>
     <string name="remove_ad_text">This will link to Paid Version in google play store</string>

@@ -45,14 +45,15 @@ public class TimeRecognition {
     private Calendar calendar;
 
     public TimeRecognition(String voiceInput) {
+        this.voiceInput = voiceInput.toLowerCase();
         setupCurrentTime();
 
-        if (voiceInput.contains("a.m.") || voiceInput.contains("p.m.")) {
-            extractFromPatternOne(voiceInput);
-        } else if (voiceInput.contains("hour") || voiceInput.contains("minute")) {
-            extractFromPatternTwo(voiceInput);
+        if (this.voiceInput.contains("a.m.") || this.voiceInput.contains("p.m.")) {
+            extractFromPatternOne(this.voiceInput);
+        } else if (this.voiceInput.contains("hour") || this.voiceInput.contains("minute")) {
+            extractFromPatternTwo(this.voiceInput);
         } else {
-            extractDate(voiceInput);
+            extractDate(this.voiceInput);
         }
 
         if (targetMillisecond > 0) {
