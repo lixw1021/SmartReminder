@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single"
+        android:id="@+id/basic_navigation_menu">
+        <item
+            android:id="@+id/menu_done"
+            android:icon="@drawable/ic_checked"
+            android:title="@string/men_done" />
+        <item
+            android:id="@+id/menu_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/men_settings" />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/app_info">
+        <item
+            android:id="@+id/menu_feedback"
+            android:icon="@drawable/ic_feedback"
+            android:title="@string/menu_feedback" />
+        <item
+            android:id="@+id/menu_about"
+            android:icon="@drawable/ic_info"
+            android:title="@string/men_about" />
+    </group>
+</menu>

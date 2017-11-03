@@ -17,6 +17,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+        free {
+            applicationId "com.smartReminder.free"
+        }
+        paid {
+            applicationId "com.smartReminder.paid"
+        }
+    }
 }
 
 dependencies {
@@ -38,4 +46,5 @@ dependencies {
     compile 'com.hannesdorfmann:swipeback:1.0.4'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    freeCompile 'com.google.android.gms:play-services-ads:11.4.2'
 }

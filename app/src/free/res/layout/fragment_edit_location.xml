@@ -1,0 +1,129 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    tools:context="com.xianwei.smartreminder.fragment.EditLocationFragment">
+
+    <TextView
+        android:id="@+id/tv_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="@string/task"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <EditText
+        android:id="@+id/et_location_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_task"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:hint="@string/enter_to_do_here"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <TextView
+        android:id="@+id/tv_location_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_location_task"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="@string/location_name"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <EditText
+        android:id="@+id/et_location_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_location_name"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:hint="@string/enter_location_name"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <TextView
+        android:id="@+id/tv_location_reminder_radius"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_location_name"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="@string/reminder_radius_m"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <EditText
+        android:id="@+id/et_location_reminder_radius"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_location_reminder_radius"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:hint="@string/enter_radius_20_10000"
+        android:inputType="number"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_location_reminder_radius"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="16dp"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_location"
+        android:gravity="center_vertical"
+        android:text="@string/pick_reminder_location"
+        android:textSize="@dimen/item_subtitle_size" />
+
+
+    <ImageButton
+        android:id="@+id/ib_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/tv_location"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="40dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_delete"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/adView_edit_location"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="4dp"
+            android:src="@drawable/powered_by_google_light" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:paddingBottom="4dp"
+            android:text="@string/http_www_google_com_policies_privacy"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView_edit_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id" />
+
+</RelativeLayout>

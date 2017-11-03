@@ -25,7 +25,7 @@
         </activity>
         <activity
             android:name=".EditActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName="MainActivity" />
 
         <provider
             android:name=".data.ReminderProvider"
@@ -46,7 +46,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/new_app_widget_info" />
+                android:resource="@xml/widget_info" />
         </receiver>
 
         <service android:name=".widget.TimeReminderWidgetRemoteViewsService"

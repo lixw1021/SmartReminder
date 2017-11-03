@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.xianwei.smartreminder.R;
 
+
 /**
  * A simple {@link Fragment} subclass.
  */

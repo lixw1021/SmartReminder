@@ -115,5 +115,4 @@
             android:text="@string/http_www_google_com_policies_privacy"
             android:textAlignment="center" />
     </LinearLayout>
-
 </RelativeLayout>

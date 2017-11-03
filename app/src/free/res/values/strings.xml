@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="version_1_0">Free Version 1.0</string>
+    <string name="remove_ad_text">This will link to Paid Version in google play store</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+</resources>

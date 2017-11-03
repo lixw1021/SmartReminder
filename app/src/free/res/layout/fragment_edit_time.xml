@@ -1,0 +1,113 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="@string/task"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <EditText
+        android:id="@+id/et_time_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_task"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:hint="@string/enter_to_do_here"
+        android:textSize="@dimen/item_subtitle_size" />
+
+    <LinearLayout
+        android:id="@+id/date_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_time_task"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_date_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_horizontal"
+            android:layout_marginStart="@dimen/margin_horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_weight="4"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_date"
+            android:gravity="center_vertical"
+            android:hint="@string/set_reminder_data" />
+
+        <ImageButton
+            android:id="@+id/ib_date_clean"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_clear"
+            android:visibility="gone"
+            android:contentDescription="@string/description_clean_selected_date"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/time_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/date_layout"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_time_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_horizontal"
+            android:layout_marginStart="@dimen/margin_horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_weight="4"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_time"
+            android:gravity="center_vertical"
+            android:hint="@string/set_reminder_time"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/ib_time_clean"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_clear"
+            android:visibility="gone"
+            android:contentDescription="@string/description_clean_selected_time"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/ib_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/time_layout"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="40dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_delete"
+        android:visibility="gone"
+        android:contentDescription="@string/description_delete_task"/>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView_edit_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id" />
+</RelativeLayout>
