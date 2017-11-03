@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.ib_voice_input)
     void voidInput() {
-//        NotificationUtils.timeReminder(this);
         promptSpeechInput();
     }
 
@@ -120,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {
-
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     launchEditFragment(result.get(0));

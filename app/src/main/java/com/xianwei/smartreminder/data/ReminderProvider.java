@@ -14,6 +14,8 @@ import android.util.Log;
 
 import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
 import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
+import com.xianwei.smartreminder.widget.TimeReminderWidgetProvider;
+
 /**
  * Created by xianwei li on 10/20/2017.
  */
@@ -88,7 +90,9 @@ public class ReminderProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
         switch (uriMatcher.match(uri)) {
             case TIME_REMINDER:
-                return insertReminder(uri, values, TimeEntry.TABLE_NAME);
+                Uri newUri =  insertReminder(uri, values, TimeEntry.TABLE_NAME);
+                TimeReminderWidgetProvider.sendRefreshBroadcast(getContext());
+                return newUri;
             case LOCATION_REMINDER:
                 return insertReminder(uri, values, LocationEntry.TABLE_NAME);
             default:
@@ -116,6 +120,7 @@ public class ReminderProvider extends ContentProvider {
                 selection = TimeEntry._ID + "=?";
                 selectionArgs = new String[] {uri.getLastPathSegment()};
                 rowDeleted = db.delete(TimeEntry.TABLE_NAME, selection, selectionArgs);
+                TimeReminderWidgetProvider.sendRefreshBroadcast(getContext());
                 break;
             case TIME_REMINDER:
                 rowDeleted = db.delete(TimeEntry.TABLE_NAME, selection, selectionArgs);
@@ -166,6 +171,7 @@ public class ReminderProvider extends ContentProvider {
         if (rowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
+        TimeReminderWidgetProvider.sendRefreshBroadcast(getContext());
         return rowsUpdated;
     }
 

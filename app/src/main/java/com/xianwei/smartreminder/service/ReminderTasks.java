@@ -10,7 +10,9 @@ import android.os.Bundle;
 import com.xianwei.smartreminder.Geofencing;
 import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
 import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
+import com.xianwei.smartreminder.data.ReminderProvider;
 import com.xianwei.smartreminder.util.NotificationUtils;
+import com.xianwei.smartreminder.widget.TimeReminderWidgetProvider;
 
 import java.util.ArrayList;
 import java.util.List;

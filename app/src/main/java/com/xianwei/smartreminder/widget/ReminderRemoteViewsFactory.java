@@ -2,7 +2,6 @@ package com.xianwei.smartreminder.widget;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -35,6 +34,7 @@ class ReminderRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
     }
 
     private Cursor getCursorFromDatabase(Context context) {
+        if (cursor != null) cursor.close();
         String[] projection = new String[]{
                 TimeEntry._ID,
                 TimeEntry.COLUMN_NAME_TASK,
@@ -48,47 +48,39 @@ class ReminderRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                 TimeEntry.COLUMN_NAME_TASK_DONE + "=?",
                 new String[]{String.valueOf(DATABASE_FALSE)},
                 TimeEntry.COLUMN_NAME_MILLISECOND + " ASC");
-
     }
 
     @Override
     public void onDestroy() {
-
     }
 
     @Override
     public int getCount() {
-        Log.i("12345cursor", "getCount");
         if (cursor == null || cursor.getCount() == 0) return 0;
         return cursor.getCount();
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
-        Log.i("12345RemoteViews", String.valueOf(position));
         cursor.moveToPosition(position);
         final int id = cursor.getInt(cursor.getColumnIndex(TimeEntry._ID));
         String task = cursor.getString(cursor.getColumnIndex(TimeEntry.COLUMN_NAME_TASK));
         long millisecond = cursor.getLong(cursor.getColumnIndex(TimeEntry.COLUMN_NAME_MILLISECOND));
         int hasTime = cursor.getInt(cursor.getColumnIndex(TimeEntry.COLUMN_NAME_HAS_TIME));
-        int taskDone = cursor.getInt(cursor.getColumnIndex(TimeEntry.COLUMN_NAME_TASK_DONE));
-        Log.i("12345RemoteViews", task);
-        Log.i("12345RemoteViews", String.valueOf(millisecond));
 
-        RemoteViews reminderItemView = new RemoteViews(context.getPackageName(), R.layout.item_time_reminder);
-        reminderItemView.setTextViewText(R.id.tv_time_reminder_title, task);
-//        if (millisecond > 0) {
-//            DateAndTime dateAndTime = TimeUtil.millisecondToDateAndTime(millisecond);
-//
-//            reminderItemView.setTextViewText(R.id.tv_task_date, TimeUtil.dateDisplay(
-//                    dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDay()));
-//
-//            if (hasTime == DATABASE_TRUE) {
-//                reminderItemView.setTextViewText(R.id.tv_task_time, TimeUtil.timeDisplay(
-//                        dateAndTime.getHour(), dateAndTime.getMinute()));
-//            }
-//        }
+        RemoteViews reminderItemView = new RemoteViews(context.getPackageName(), R.layout.item_widget);
+        reminderItemView.setTextViewText(R.id.tv_widget_item_title, task);
+        if (millisecond > 0) {
+            DateAndTime dateAndTime = TimeUtil.millisecondToDateAndTime(millisecond);
 
+            reminderItemView.setTextViewText(R.id.tv_widget_item_date, TimeUtil.dateDisplay(
+                    dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDay()));
+
+            if (hasTime == DATABASE_TRUE) {
+                reminderItemView.setTextViewText(R.id.tv_widget_item_time, TimeUtil.timeDisplay(
+                        dateAndTime.getHour(), dateAndTime.getMinute()));
+            }
+        }
 
         return reminderItemView;
     }

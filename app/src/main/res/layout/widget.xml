@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/widget_margin">
@@ -8,6 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:paddingStart="@dimen/margin_horizontal"
+        android:paddingEnd="@dimen/margin_horizontal"
+        android:drawableEnd="@drawable/ic_alarm_add"
         android:background="@color/colorPrimary"
         android:text="@string/widget_title"
         android:textColor="@color/colorWhite"
@@ -15,6 +19,8 @@
         android:textStyle="bold|italic" />
 
     <ListView
+        android:background="@color/colorWhite"
+        android:alpha="0.5"
         android:id="@+id/widget_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

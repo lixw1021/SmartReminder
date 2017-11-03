@@ -135,7 +135,7 @@ public class TimeReminderAdapter extends RecyclerView.Adapter<TimeReminderAdapte
                     intent.putExtra(EditActivity.EXTRA_ITEM_ID, itemId);
                     intent.putExtra(
                             EditActivity.EXTRA_EDIT_FRAGMENT,
-                            EditActivity.EXTRA_EDIT_FRAGMENT);
+                            EditActivity.EXTRA_TIME_EDIT);
                     context.startActivity(intent);
                 }
             });
