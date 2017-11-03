@@ -66,7 +66,6 @@ public class EditLocationFragment extends Fragment {
     private static final String TAG = EditActivity.class.getSimpleName();
     private static final int PLACE_PICKER_REQUEST = 1;
     private String placeId;
-    private Bundle bundle;
     private int itemId;
     private GeoDataClient geoDataClient;
     private Geofencing geofencing;
@@ -85,7 +84,7 @@ public class EditLocationFragment extends Fragment {
         setHasOptionsMenu(true);
         geoDataClient = Places.getGeoDataClient(getContext(), null);
         geofencing = new Geofencing(getContext());
-        bundle = this.getArguments();
+        Bundle bundle = this.getArguments();
         if (bundle != null) {
             itemId = bundle.getInt(EditActivity.EXTRA_ITEM_ID, -1);
             String task = bundle.getString(EditActivity.EXTRA_VOICE_INPUT);
@@ -117,7 +116,7 @@ public class EditLocationFragment extends Fragment {
         reminderRadiusEt.setText(String.valueOf(radius));
         geoDataClient.getPlaceById(placeId).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
             @Override
-            public void onComplete(Task<PlaceBufferResponse> task) {
+            public void onComplete(@NonNull Task<PlaceBufferResponse> task) {
                 if (task.isSuccessful()) {
                     PlaceBufferResponse places = task.getResult();
                     Place place = places.get(0);
@@ -249,10 +248,4 @@ public class EditLocationFragment extends Fragment {
         Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
 }

@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.xianwei.TimeRecognition;
 import com.xianwei.smartreminder.EditActivity;
 import com.xianwei.smartreminder.R;
+import com.xianwei.smartreminder.data.ReminderContract;
 import com.xianwei.smartreminder.data.ReminderContract.TimeEntry;
 import com.xianwei.smartreminder.module.DateAndTime;
 import com.xianwei.smartreminder.util.TimeUtil;
@@ -59,9 +60,7 @@ public class EditTimeFragment extends Fragment {
     private static final int DATABASE_FALSE = 0;
 
     private int hasTime = DATABASE_FALSE;
-    private int taskDone = DATABASE_FALSE;
 
-    private Bundle bundle;
     private int itemId;
     private int pickedYear;
     private int pickedMonth;
@@ -78,7 +77,7 @@ public class EditTimeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_time, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-        bundle = this.getArguments();
+        Bundle bundle = this.getArguments();
         if (bundle != null) {
             itemId = bundle.getInt(EditActivity.EXTRA_ITEM_ID, -1);
             String task = bundle.getString(EditActivity.EXTRA_VOICE_INPUT);
@@ -115,7 +114,7 @@ public class EditTimeFragment extends Fragment {
         String task = cursor.getString(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK));
         long millisecond = cursor.getLong(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_MILLISECOND));
         hasTime = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_HAS_TIME));
-        taskDone = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK_DONE));
+        int taskDone = cursor.getInt(cursor.getColumnIndexOrThrow(TimeEntry.COLUMN_NAME_TASK_DONE));
 
         taskEt.setText(task);
         deleteBtn.setVisibility(View.VISIBLE);
@@ -285,7 +284,7 @@ public class EditTimeFragment extends Fragment {
         }
     }
 
-    public ContentValues addContentValues(String task) {
+    private ContentValues addContentValues(String task) {
         Date date = new Date(pickedYear - 1900, pickedMonth, pickedDay, pickedHour, pickedMinute);
         long timeInMilliseconds = date.getTime();
 
@@ -310,7 +309,7 @@ public class EditTimeFragment extends Fragment {
         }
     }
 
-    public void showToast(String message) {
+    private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 }

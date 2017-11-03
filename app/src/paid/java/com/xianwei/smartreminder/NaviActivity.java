@@ -26,7 +26,7 @@ public class NaviActivity extends AppCompatActivity {
     public static final String EXTRA_REMOVE_AD = "com.xianwei.extra.REMOVE_AD";
     public static final String EXTRA_FEEDBACK = "com.xianwei.extra.FEEDBACK";
     public static final String EXTRA_ABOUT = "com.xianwei.extra.ABOUT";
-    Fragment fragment;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

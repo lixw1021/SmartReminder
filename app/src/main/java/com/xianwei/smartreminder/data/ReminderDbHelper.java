@@ -11,8 +11,8 @@ import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
 
 public class ReminderDbHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Reminder.db";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "Reminder.db";
 
     private static final String SQL_CREATE_TIME_ENTRY =
             "CREATE TABLE " + TimeEntry.TABLE_NAME + " (" +

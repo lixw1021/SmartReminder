@@ -22,7 +22,7 @@ import com.xianwei.smartreminder.widget.TimeReminderWidgetProvider;
 
 public class ReminderProvider extends ContentProvider {
 
-    public static final String LOG_TAG = ReminderProvider.class.getSimpleName();
+    private static final String LOG_TAG = ReminderProvider.class.getSimpleName();
     private static final String QUERY_NOT_SUPPORT = "query is not support for :";
     private static final String INSERT_NOT_SUPPORT = "insert is not support for :";
     private static final String DELETE_NOT_SUPPORT = "delete is not support for :";
@@ -31,7 +31,7 @@ public class ReminderProvider extends ContentProvider {
     private static final int TIME_REMINDER_ID = 101;
     private static final int LOCATION_REMINDER = 102;
     private static final int LOCATION_REMINDER_ID = 103;
-    public ReminderDbHelper reminderDbHelper;
+    private ReminderDbHelper reminderDbHelper;
 
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
@@ -51,6 +51,7 @@ public class ReminderProvider extends ContentProvider {
         return true;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection,
@@ -100,6 +101,7 @@ public class ReminderProvider extends ContentProvider {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private Uri insertReminder(Uri uri, ContentValues values, String tableName) {
         SQLiteDatabase db = reminderDbHelper.getWritableDatabase();
         long id = db.insert(tableName, null, values);
@@ -110,6 +112,7 @@ public class ReminderProvider extends ContentProvider {
         return ContentUris.withAppendedId(uri, id);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection,
                       @Nullable String[] selectionArgs) {
@@ -159,6 +162,7 @@ public class ReminderProvider extends ContentProvider {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private int updateTimeReminder(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         if (values.containsKey(TimeEntry.COLUMN_NAME_TASK)) {
             String task = values.getAsString(TimeEntry.COLUMN_NAME_TASK);
@@ -175,6 +179,7 @@ public class ReminderProvider extends ContentProvider {
         return rowsUpdated;
     }
 
+    @SuppressWarnings("ConstantConditions")
     private int updateLocationReminder(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         if (values.containsKey(LocationEntry.COLUMN_NAME_TASK)) {
             String task = values.getAsString(LocationEntry.COLUMN_NAME_TASK);

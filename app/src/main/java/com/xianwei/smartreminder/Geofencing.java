@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
@@ -33,7 +34,7 @@ import java.util.List;
 
 public class Geofencing {
 
-    public static final String TAG = Geofencing.class.getSimpleName();
+    private static final String TAG = Geofencing.class.getSimpleName();
     private static final long GEOFENCE_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours
 
     private Geofence geofence;
@@ -76,7 +77,7 @@ public class Geofencing {
             geoDataClient.getPlaceById(placeId)
                     .addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
                         @Override
-                        public void onComplete(Task<PlaceBufferResponse> task) {
+                        public void onComplete(@NonNull Task<PlaceBufferResponse> task) {
                             if (task.isSuccessful()) {
                                 PlaceBufferResponse places = task.getResult();
                                 Place place = places.get(0);

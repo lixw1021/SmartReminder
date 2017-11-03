@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.ib_voice_input)
     ImageButton voiceInputBtn;
 
-    private ReminderPagerAdapter reminderPagerAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupToolbar();
 
-        reminderPagerAdapter = new ReminderPagerAdapter(getSupportFragmentManager());
+        ReminderPagerAdapter reminderPagerAdapter = new ReminderPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(reminderPagerAdapter);
         tableLayout.setupWithViewPager(viewPager);
         setupTabIcons();
@@ -74,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupTabIcons() {
+        //noinspection ConstantConditions
         tableLayout.getTabAt(0).setIcon(R.drawable.ic_time_white);
+        //noinspection ConstantConditions
         tableLayout.getTabAt(1).setIcon(R.drawable.ic_location_white);
     }
 

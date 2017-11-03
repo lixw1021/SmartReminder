@@ -33,7 +33,7 @@ public class EditActivity extends AppCompatActivity {
     public static final String EXTRA_LOCATION_EDIT = "com.xianwei.extra.LOCATION_EDIT";
     public static final String EXTRA_ITEM_ID = "com.xianwei.extra.ITEM_ID";
 
-    Fragment fragment;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -28,8 +28,8 @@ import butterknife.ButterKnife;
  */
 
 public class TimeReminderAdapter extends RecyclerView.Adapter<TimeReminderAdapter.ViewHolder> {
-    private static int DATABASE_FALSE = 0;
-    private static int DATABASE_TRUE = 1;
+    private static final int DATABASE_FALSE = 0;
+    private static final int DATABASE_TRUE = 1;
 
     private Context context;
     private Cursor cursor;

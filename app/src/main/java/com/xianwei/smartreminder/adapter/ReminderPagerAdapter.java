@@ -13,7 +13,7 @@ import com.xianwei.smartreminder.fragment.TimeReminderListFragment;
 
 public class ReminderPagerAdapter extends FragmentPagerAdapter {
 
-    private static int NUM_ITEMS = 2;
+    private static final int NUM_ITEMS = 2;
 
     public ReminderPagerAdapter(FragmentManager fm) {
         super(fm);

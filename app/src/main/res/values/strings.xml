@@ -55,7 +55,6 @@
 
     <string name="http_www_google_com_policies_privacy">http://www.google.com/policies/privacy</string>
     <string name="widget_title">Reminders</string>
-    <string name="add_widget">Add widget</string>
     <string name="feedback_question">Find any bug or have suggestions ?    Please, let me know, and I will make the best to improve this App.</string>
     <string name="enter_your_feedback_here">Enter your feedback here</string>
     <string name="send_feedback">Send feedback</string>
