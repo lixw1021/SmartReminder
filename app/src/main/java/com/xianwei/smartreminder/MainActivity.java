@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                     item.setChecked(false);
                 }
 
-                drawerLayout.closeDrawer(Gravity.LEFT);
+                drawerLayout.closeDrawer(Gravity.START);
                 return false;
             }
         });

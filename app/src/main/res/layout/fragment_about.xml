@@ -1,13 +1,39 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.xianwei.smartreminder.fragment.AboutFragment">
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/feedback_view_margin"
+        android:src="@drawable/ic_alarm" />
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/feedback_view_margin"
+        android:gravity="center"
+        android:text="@string/free_version_1_0" />
 
-</FrameLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/feedback_view_margin"
+        android:gravity="center"
+        android:text="@string/by_xianwei" />
+
+    <TextView
+        android:id="@+id/tv_about_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/feedback_view_margin"
+        android:drawablePadding="@dimen/feedback_view_margin"
+        android:drawableStart="@drawable/ic_email"
+        android:gravity="center"
+        android:text="@string/feedback_email"
+        android:textColor="@color/colorPrimary" />
+
+</LinearLayout>
