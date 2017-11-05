@@ -2,10 +2,13 @@ package com.xianwei.smartreminder.util;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Action;
@@ -26,6 +29,8 @@ public class NotificationUtils {
     public static final String EXTRA_TASK_ID = "com.xianwei.extra.TASK_ID";
     public static final String EXTRA_TASK_MILLISECONDS = "com.xianwei.extra.TASK_MILLISECONDS";
     public static final String EXTRA_TASK_TITLE = "com.xianwei.extra.TASK_TITLE";
+    private static final String TIME_NOTIFICATION_CHANNEL_ID = "time_channel";
+    private static final String LOCATION_NOTIFICATION_CHANNEL_ID = "location_channel";
 
     //make sure it won't equal to time reminder notification id
     public static final int LOCATION_NOTIFICATION_ID = -100;
@@ -40,16 +45,31 @@ public class NotificationUtils {
 
     public static void locationReminder(Context context, Intent intent) {
         String task = intent.getStringExtra(EXTRA_TASK_TITLE);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+        NotificationManager manager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationChannel notificationChannel = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel = new NotificationChannel(
+                    LOCATION_NOTIFICATION_CHANNEL_ID,
+                    context.getString(R.string.location_notification_channel_name),
+                    NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.setShowBadge(true);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
+            manager.createNotificationChannel(notificationChannel);
+        }
+
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(context,LOCATION_NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_location)
                 .setContentText(task)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setContentIntent(contentIntent(context))
                 .addAction(locationTaskDone(context, intent))
                 .setAutoCancel(true);
-
-        NotificationManager manager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         manager.notify(LOCATION_NOTIFICATION_ID, notificationBuilder.build());
     }
@@ -74,7 +94,25 @@ public class NotificationUtils {
     public static void timeReminder(Context context, Intent intent) {
         String task = intent.getStringExtra(EXTRA_TASK_TITLE);
         int taskId = intent.getIntExtra(EXTRA_TASK_ID, 0);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+        NotificationManager manager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationChannel notificationChannel = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel = new NotificationChannel(
+                    TIME_NOTIFICATION_CHANNEL_ID,
+                    context.getString(R.string.time_notification_channel_nbame),
+                    NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.setShowBadge(true);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
+            manager.createNotificationChannel(notificationChannel);
+        }
+
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(context, TIME_NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_time)
                 .setContentText(task)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
@@ -82,9 +120,6 @@ public class NotificationUtils {
                 .addAction(taskDone(context, intent))
                 .addAction(taskPostpone(context, intent))
                 .setAutoCancel(true);
-
-        NotificationManager manager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         manager.notify(taskId, notificationBuilder.build());
     }

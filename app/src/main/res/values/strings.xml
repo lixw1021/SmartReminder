@@ -62,5 +62,7 @@
     <string name="version_1_0">Version 1.0</string>
     <string name="by_xianwei">by xianwei</string>
     <string name="remove_ad_text">This will link to Paid Version in google play store</string>
+    <string name="location_notification_channel_name">Location Notification</string>
+    <string name="time_notification_channel_nbame">Time Notification</string>
 
 </resources>
