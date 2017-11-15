@@ -11,7 +11,7 @@ import com.xianwei.smartreminder.data.ReminderContract.LocationEntry;
 
 public class ReminderDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "Reminder.db";
 
     private static final String SQL_CREATE_TIME_ENTRY =
@@ -20,7 +20,8 @@ public class ReminderDbHelper extends SQLiteOpenHelper {
                     TimeEntry.COLUMN_NAME_TASK + " TEXT NOT NULL," +
                     TimeEntry.COLUMN_NAME_MILLISECOND + " INTEGER NOT NULL DEFAULT 0," +
                     TimeEntry.COLUMN_NAME_HAS_TIME + " INTEGER NOT NULL DEFAULT 0," +
-                    TimeEntry.COLUMN_NAME_TASK_DONE + " INTEGER NOT NULL DEFAULT 0)";
+                    TimeEntry.COLUMN_NAME_TASK_DONE + " INTEGER NOT NULL DEFAULT 0," +
+                    TimeEntry.COLUMN_NAME_REPEAT + " INTEGER NOT NULL DEFAULT 0)";
 
     private static final String SQL_CREATE_LOCATION_ENTRY =
             "CREATE TABLE " + LocationEntry.TABLE_NAME + " (" +
@@ -29,7 +30,15 @@ public class ReminderDbHelper extends SQLiteOpenHelper {
                     LocationEntry.COLUMN_NAME_LOCATION_NAME + " TEXT NOT NULL," +
                     LocationEntry.COLUMN_NAME_LOCATION_RADIUS + " INTEGER NOT NULL DEFAULT 50," +
                     LocationEntry.COLUMN_NAME_LOCATION_ID + " TEXT NOT NULL, " +
-                    LocationEntry.COLUMN_NAME_TASK_DONE + " INTEGER NOT NULL DEFAULT 0)";
+                    LocationEntry.COLUMN_NAME_TASK_DONE + " INTEGER NOT NULL DEFAULT 0, " +
+                    LocationEntry.COLUMN_NAME_ENTER_LOCATION + " INTEGER NOR NULL DEFAULT 0)";
+
+    private static final String DATABASE_ALTER_TIME_TABLE = "ALTER TABLE " + TimeEntry.TABLE_NAME +
+            " ADD COLUMN " + TimeEntry.COLUMN_NAME_REPEAT + " INTEGER NOT NULL DEFAULT 0;";
+
+    private static final String DATABASE_ALTER_LOCATION_TABLE =
+            "ALTER TABLE " + LocationEntry.TABLE_NAME + " ADD COLUMN " +
+                    LocationEntry.COLUMN_NAME_ENTER_LOCATION + " INTEGER NOR NULL DEFAULT 0;";
 
     public ReminderDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,6 +52,9 @@ public class ReminderDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // not need for the first version
+        if (oldVersion == 1) {
+            db.execSQL(DATABASE_ALTER_TIME_TABLE);
+            db.execSQL(DATABASE_ALTER_LOCATION_TABLE);
+        }
     }
 }

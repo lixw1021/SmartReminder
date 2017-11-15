@@ -25,6 +25,7 @@ public final class ReminderContract {
         public static final String COLUMN_NAME_MILLISECOND = "millisecond";
         public static final String COLUMN_NAME_TASK_DONE = "task_done";
         public static final String COLUMN_NAME_HAS_TIME = "has_time";
+        public static final String COLUMN_NAME_REPEAT = "repeat";
     }
 
     public static class LocationEntry implements BaseColumns {
@@ -39,5 +40,6 @@ public final class ReminderContract {
         public static final String COLUMN_NAME_LOCATION_RADIUS = "location_radius";
         public static final String COLUMN_NAME_LOCATION_ID = "Location_id";
         public static final String COLUMN_NAME_TASK_DONE = "task_done";
+        public static final String COLUMN_NAME_ENTER_LOCATION = "enter_location";
     }
 }
